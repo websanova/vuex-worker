@@ -9,47 +9,46 @@ export default {
 
             clear: false,
 
-            delay: false,
-
             status: null,
 
             silent: null,
             
             loading: null,
 
+            request: null,
+
+            timer: null,
+
             errors: {},
             
-            fields: {}
+            fields: {},
         };
     },
     
     mutations: {
         start(state, data) {
             data = data || {};
-            
+
             state.msg = data.msg === true ? true : false;
             state.clear = data.clear === true ? true : false;
             state.silent = data.silent === true ? true : false;
 
             state.status = data.silent ? 'loading-silent' : 'loading';
             state.loading = true;
-            state.delay = true;
-        },
-
-        delay(state, toggle) {
-            state.delay = toggle;
         },
 
         success(state) {
             state.status = 'success';
             state.silent = false;
             state.loading = false;
+            state.request = null;
         },
 
         error(state) {
             state.status = 'error';
             state.silent = false;
             state.loading = false;
+            state.request = null;
         },
 
         clearFields(state) {
@@ -78,6 +77,14 @@ export default {
                     Vue.set(state.errors, errors[i].field, (errors[i].msg || errors[i].message));
                 }
             }
+        },
+
+        request(state, request) {
+            state.request = request;
+        },
+
+        timer(state, timer) {
+            state.timer = timer;
         }
     },
 
@@ -143,51 +150,68 @@ export default {
         },
 
         send(ctx, data) {
+            var timer;
+
             data = data || {};
 
-            // NOTE: Break the promise chain if too many dupicate requests
-            //       fire off within 200ms (assumed it's uplicate).
             if (
-                ctx.state.delay &&
-                data.ignoreDelay !== true
+                data.abort === false &&
+                ctx.state.loading
             ) {
-                return Promise.reject('Form Store Duplicate Request: ' + data.url);
+                console.warn('Form store duplicate request: "' + data.url + '"');
+
+                return Promise.resolve();
             }
 
-            ctx.dispatch('start', {
-                msg: data.msg,
-                clear: data.clear,
-                silent: data.silent
-            });
-
-            setTimeout(() => {
-                ctx.commit('delay', false);
-            }, 200);
+            if (ctx.state.request) {
+                ctx.state.request.abort();
+            }
 
             return new Promise((resolve, reject) => {
-                Vue.http({
-                        method: data.method || 'get',
-                        url: data.url,
-                        params: data.body || data.params,
-                        body: Object.assign({}, data.body, ctx.state.fields)
-                    })
-                    .then((res) => {
-                        if (data.success) {
-                            data.success(res);
-                        }
+                if (ctx.state.timer) {
+                    clearTimeout(ctx.state.timer);
+                    
+                    ctx.commit('timer', null);
+                    
+                    resolve();
+                }
 
-                        ctx.dispatch('success', res);
-
-                        resolve(res);
-                    }, (res) => {
-                        if (data.error) {
-                            data.error(res);
-                        }
-
-                        ctx.dispatch('error', res);
-
-                        reject(res);
+                timer = setTimeout(() => {
+                    ctx.dispatch('start', {
+                        msg: data.msg,
+                        clear: data.clear,
+                        silent: data.silent
                     });
+
+                    Vue.http({
+                            method: data.method || 'get',
+                            url: data.url,
+                            params: data.body || data.params,
+                            body: Object.assign({}, data.body, ctx.state.fields),
+                            before: function(req) {
+                                ctx.commit('request', req);
+                            }
+                        })
+                        .then((res) => {
+                            if (data.success) {
+                                data.success(res);
+                            }
+
+                            ctx.dispatch('success', res);
+
+                            resolve(res);
+                        }, (res) => {
+                            if (data.error) {
+                                data.error(res);
+                            }
+
+                            ctx.dispatch('error', res);
+
+                            reject(res);
+                        });
+                }, 50);
+
+                ctx.commit('timer', timer);
             });
         }
     },

@@ -56,7 +56,7 @@ export default {
         send(ctx, data) {
             var i,
                 body,
-                filters = ctx.state.filter.data;
+                filters = ctx.state.filter.fields;
 
             data = data || {};
             body = data.body || {};
@@ -73,6 +73,7 @@ export default {
                 ctx
                 .dispatch('form/send', {
                     url: data.url,
+                    abort: data.abort,
                     silent: data.silent,
                     method: data.method,
                     body: body,

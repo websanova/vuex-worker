@@ -33,8 +33,12 @@
 </template>
 
 <script>
+    import demoStr from '../store/modules/demo';
+    
     export default {
-
+        beforeCreate() {
+            this.$store.addModule('demo', demoStr);
+        }
     }
 </script>
 

@@ -32,7 +32,8 @@
                 <ul class="spacer">
                     <li>
                         <select
-                            @change="filter({role: $event})"
+                            :value="_payload.filter.fields.role.value"
+                            @change="filter({role: $event.target.value})"
                         >
                             <option value="">All Roles</option>
                             <option value="super">Super</option>
@@ -43,7 +44,8 @@
 
                     <li>
                         <select
-                            @change="filter({state: $event})"
+                            :value="_payload.filter.fields.state.value"
+                            @change="filter({state: $event.target.value})"
                         >
                             <option value="">All States</option>
                             <option value="active">Active</option>
@@ -79,7 +81,7 @@
             </div>
 
             <div class="media-tight media-middle">
-                <ul class="spacer spacer-pipe txt-sm">
+                <ul class="spacer spacer-pipe text-sm">
                     <li>
                         <a
                             @click=""
@@ -119,19 +121,42 @@
             }
         },
 
+        watch: {
+            '$route.query.page'(val) {
+                this.filter({page: val});
+            },
+
+            '$route.query.role'(val) {
+                this.filter({role: val});
+            },
+
+            '$route.query.state'(val) {
+                this.filter({state: val});
+            },
+
+            '$route.query.query'(val) {
+                this.filter({query: val});
+            }
+        },
+
         mounted() {
-            this.request();
+            this.filter({
+                page: this.$route.query.page,
+                role: this.$route.query.role,
+                state: this.$route.query.state,
+                query: this.$route.query.query,
+            });
         },
 
         methods: {
-            request(data) {
-                this._worker.request(data);
-            },
-
             filter(data) {
                 this._worker
                     .work('filter/update', data)
                     .request();
+            },
+
+            request(data) {
+                this._worker.request(data);
             }
         }
     }

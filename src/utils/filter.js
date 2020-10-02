@@ -7,7 +7,9 @@ export default {
         return {
             previous: {},
 
-            fields: {}
+            fields: {},
+
+            timer: null
         };
     },
     
@@ -26,8 +28,17 @@ export default {
                     as: filters[i].as || i,
                     default: ddefault,
                     value: filters[i].value !== undefined ? filters[i].value : (query[i] !== undefined ? query[i] : (params[i] !== undefined ? params[i] : ddefault)),
-                    show: filters[i].show
+                    show: filters[i].show,
+                    reset: filters[i].reset || []
                 };
+
+                if (fields[i].reset.constructor !== Array) {
+                    fields[i].reset = [fields[i].reset];
+                }
+
+                if (i !== 'page' && !fields[i].reset.length) {
+                    fields[i].reset = ['page'];
+                }
             }
 
             Vue.set(state, 'fields', fields);
@@ -39,6 +50,10 @@ export default {
 
         update(state, fields) {
             Vue.set(state, 'fields', fields);
+        },
+
+        timer(state, timer) {
+            state.timer = timer;
         }
     },
 
@@ -53,26 +68,39 @@ export default {
 
         update(ctx, filters) {
             var i,
+                j, jj,
+                reset = null,
+                timer = null,
                 fields = JSON.parse(JSON.stringify(ctx.state.fields));
 
             ctx.commit('previous');
 
             for (i in filters) {
-                if (fields[i]) {
-                    fields[i].value = filters[i];
-                }
+                (function (i) {
+                    if (fields[i]) {
+                        fields[i].value = filters[i] === undefined ? fields[i].default : filters[i];
+                    }
 
-                if (
-                    fields.page &&
-                    i !== 'page'
-                ) {
-                    fields.page.value = 1;
-                }
+                    for (j = 0, jj = fields[i].reset.length; j < jj; j++) {
+                        if (!filters[fields[i].reset[j]]) {
+                            fields[fields[i].reset[j]].value = fields[fields[i].reset[j]].default;
+                        }
+                    }
+                })(i);
             }
 
             ctx.commit('update', fields);
             
-            ctx.dispatch('path');
+            if (ctx.state.timer) {
+                clearTimeout(ctx.state.timer);
+                ctx.commit('timer', null);
+            }
+
+            timer = setTimeout(() => {
+                ctx.dispatch('path');
+            }, 50);
+
+            ctx.commit('timer', timer);
         },
 
         path(ctx) {

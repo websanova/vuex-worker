@@ -64,7 +64,7 @@ Vuex.Store.prototype.callHooks = function (name, store, path) {
         store.hooks &&
         store.hooks[name]
     ) {
-        store.hooks[name].call(this, ctx);
+        store.hooks[name].call(_this, ctx);
     }
 
     if (store.modules) {
@@ -140,25 +140,25 @@ Vuex.Store.prototype.worker = function (path) {
         var stage   = ctx.getters['worker/stage'];
         var request = raw.request || {};
 
-        data = Object.assign({}, data || {}, request);
+        data = data || {};
 
-        for (i in data) {
-            (function (i) {
-                if (data[i] instanceof Function) {
-                    data[i] = data[i].call(_this, ctx, ctx.getters['worker/stage']);
-                }
-            })(i);
-        }
+        data.url    = data.url || (request.url instanceof Function ? request.url.call(_this, ctx, ctx.getters['worker/stage']) : request.url) ;
+        data.body   = data.body || (request.body instanceof Function ? request.body.call(_this, ctx, ctx.getters['worker/stage']) : request.body) || {};
+        data.params = data.params || (request.params instanceof Function ? request.params.call(_this, ctx, ctx.getters['worker/stage']) : request.params) || {};
+        data.msg    = data.msg !== undefined ? data.msg : request.msg;
+        data.clear  = data.clear !== undefined ? data.clear : request.clear;
+        data.silent = data.silent !== undefined ? data.silent : request.silent;
+        data.abort  = data.abort !== undefined ? data.abort : request.abort;
 
         return chain
             .dispatch('worker/send', data)
             .then((res) => {
-                if (data.success) {
-                    data.success.call(_this, ctx, res, ctx.getters['worker/stage']);
+                if (request.success) {
+                    request.success.call(_this, ctx, res, ctx.getters['worker/stage']);
                 }
             }, (res) => {
-                if (data.error) {
-                    data.error.call(_this, ctx, res, ctx.getters['worker/stage']);
+                if (request.error) {
+                    request.error.call(_this, ctx, res, ctx.getters['worker/stage']);
                 }
             });
     };

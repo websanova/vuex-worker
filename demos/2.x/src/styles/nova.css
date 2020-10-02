@@ -79,6 +79,8 @@ a,
 .text-default {color: #3a3a3a}
 .text-primary {color: #6699ff}
 
+.text-sm {font-size: 0.8em;}
+
 /**************************************
  * SPACER
  **************************************/

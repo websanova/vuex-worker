@@ -36,6 +36,15 @@ MIT licensed
 Copyright (C) 2011-2020 Websanova https://websanova.com
 
 
+## TODO
+
+- clean up filter previous / fields / data
+- clean up stage update, should append note reset.
+
+
+
+
+
 ## Primer
 
 The conception of this Vuex extension came from the idea of a (for the lack of a better term) "worker" pattern for Vuex stores.
@@ -140,6 +149,12 @@ url: 'users/' + user.id +  '/projects/all'
 
 
 
+## Caveats
+
+hooks only works when use addModule since it's built in manually....
+
+
+
 
 
 
@@ -155,7 +170,7 @@ Further explanation and details on the Vuex "worker" pattern below.
 
 
 
-
+*** Also handles param filter, form request with async changes....
 
 
 

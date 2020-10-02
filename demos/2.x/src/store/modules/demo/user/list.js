@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import list from '@websanova/vuex-worker/src/actions/list';
 
 export default {
@@ -9,7 +10,13 @@ export default {
 
     hooks: {
         created(ctx) {
-            // ctx.worker
+            this.worker('demo/user/list')
+                .work('filter/reset', {
+                    page: 1,
+                    role: '',
+                    state: '',
+                    query: '',
+            });
         }
     },
 
