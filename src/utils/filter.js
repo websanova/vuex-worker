@@ -5,9 +5,9 @@ export default {
 
     state() {
         return {
-            previous: {},
+            data: {},
 
-            fields: {},
+            previous: {},
 
             timer: null
         };
@@ -19,12 +19,12 @@ export default {
                 query = Vue.router.app.$route.query,
                 params = Vue.router.app.$route.params,
                 ddefault,
-                fields = {};
+                data = {};
 
             for (i in filters) {
                 ddefault = filters[i].default !== undefined ? filters[i].default : filters[i];
 
-                fields[i] = {
+                data[i] = {
                     as: filters[i].as || i,
                     default: ddefault,
                     value: filters[i].value !== undefined ? filters[i].value : (query[i] !== undefined ? query[i] : (params[i] !== undefined ? params[i] : ddefault)),
@@ -32,24 +32,26 @@ export default {
                     reset: filters[i].reset || []
                 };
 
-                if (fields[i].reset.constructor !== Array) {
-                    fields[i].reset = [fields[i].reset];
+                if (data[i].reset.constructor !== Array) {
+                    data[i].reset = [data[i].reset];
                 }
 
-                if (i !== 'page' && !fields[i].reset.length) {
-                    fields[i].reset = ['page'];
+                if (i !== 'page' && !data[i].reset.length) {
+                    data[i].reset = ['page'];
                 }
             }
 
-            Vue.set(state, 'fields', fields);
+            Vue.set(state, 'data', data);
         },
 
-        previous(state) {
-            Vue.set(state, 'previous', JSON.parse(JSON.stringify(state.fields)));
+        previous(state, fields) {
+            console.log(fields);
+
+            Vue.set(state, 'previous', JSON.parse(JSON.stringify(fields)));
         },
 
-        update(state, fields) {
-            Vue.set(state, 'fields', fields);
+        update(state, data) {
+            Vue.set(state, 'data', data);
         },
 
         timer(state, timer) {
@@ -61,7 +63,7 @@ export default {
         reset(ctx, filters) {
             ctx.commit('reset', filters);
 
-            ctx.commit('previous');
+            ctx.commit('previous', ctx.getters['fields']);
 
             ctx.dispatch('path');
         },
@@ -71,25 +73,25 @@ export default {
                 j, jj,
                 reset = null,
                 timer = null,
-                fields = JSON.parse(JSON.stringify(ctx.state.fields));
+                data = JSON.parse(JSON.stringify(ctx.state.data));
 
-            ctx.commit('previous');
+            ctx.commit('previous', ctx.getters['fields']);
 
             for (i in filters) {
                 (function (i) {
-                    if (fields[i]) {
-                        fields[i].value = filters[i] === undefined ? fields[i].default : filters[i];
+                    if (data[i]) {
+                        data[i].value = filters[i] === undefined ? data[i].default : filters[i];
                     }
 
-                    for (j = 0, jj = fields[i].reset.length; j < jj; j++) {
-                        if (!filters[fields[i].reset[j]]) {
-                            fields[fields[i].reset[j]].value = fields[fields[i].reset[j]].default;
+                    for (j = 0, jj = data[i].reset.length; j < jj; j++) {
+                        if (!filters[data[i].reset[j]]) {
+                            data[data[i].reset[j]].value = data[data[i].reset[j]].default;
                         }
                     }
                 })(i);
             }
 
-            ctx.commit('update', fields);
+            ctx.commit('update', data);
             
             if (ctx.state.timer) {
                 clearTimeout(ctx.state.timer);
@@ -114,12 +116,12 @@ export default {
                     query: JSON.parse(JSON.stringify($route.query || {}))
                 };
 
-            for (i in ctx.state.fields) {
+            for (i in ctx.state.data) {
                 if (
-                    ctx.state.fields[i].show !== false &&
-                    ctx.state.fields[i].default !== ctx.state.fields[i].value
+                    ctx.state.data[i].show !== false &&
+                    ctx.state.data[i].default !== ctx.state.data[i].value
                 ) {
-                    route.query[i] = ctx.state.fields[i].value;
+                    route.query[i] = ctx.state.data[i].value;
                 }
                 else {
                     delete route.query[i];
@@ -137,12 +139,23 @@ export default {
     },
 
     getters: {
-        fields(state) {
-            return state.fields;
+        data(state) {
+            return state.data;
         },
 
-        isChange(state) {
-            return JSON.stringify(state.previous) !== JSON.stringify(state.fields);
+        fields(state) {
+            var i,
+                fields = {};
+
+            for (i in state.data) {
+                fields[i] = state.data[i].value
+            }
+
+            return fields;
+        },
+
+        isChange(state, getters) {
+            return JSON.stringify(state.previous) !== JSON.stringify(getters.fields);
         }
     }
 }

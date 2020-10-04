@@ -32,7 +32,7 @@
                 <ul class="spacer">
                     <li>
                         <select
-                            :value="_payload.filter.fields.role.value"
+                            :value="_payload.filter.fields.role"
                             @change="filter({role: $event.target.value})"
                         >
                             <option value="">All Roles</option>
@@ -44,7 +44,7 @@
 
                     <li>
                         <select
-                            :value="_payload.filter.fields.state.value"
+                            :value="_payload.filter.fields.state"
                             @change="filter({state: $event.target.value})"
                         >
                             <option value="">All States</option>

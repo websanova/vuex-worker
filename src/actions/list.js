@@ -56,7 +56,7 @@ export default {
         send(ctx, data) {
             var i,
                 body,
-                filters = ctx.state.filter.fields;
+                filters = ctx.state.filter.data;
 
             data = data || {};
             body = data.body || {};
@@ -183,6 +183,7 @@ export default {
 
         filter(state, getters) {
             return {
+                data: getters['filter/data'],
                 fields: getters['filter/fields'],
             };
         },
