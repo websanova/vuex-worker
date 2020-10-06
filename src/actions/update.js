@@ -23,6 +23,7 @@ export default {
         form(state, getters) {
             return {
                 status: getters['form/status'],
+                silent: getters['form/silent'],
                 loading: getters['form/loading'],
                 fields: getters['form/fields'],
                 errors: getters['form/errors'],
@@ -30,7 +31,9 @@ export default {
         },
 
         stage(state, getters) {
-            return getters['stage/data'];
-        }
+            return {
+                data: getters['stage/data'],
+            }
+        },
     }
 }

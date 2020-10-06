@@ -20,6 +20,14 @@ Vue.router = new VueRouter({
         path: '/list',
         name: 'user-list',
         component: loadView('user/List'),
+    }, {
+        path: '/users/:user_id/show',
+        name: 'user-show',
+        component: loadView('user/Show'),
+    }, {
+        path: '/users/:user_id/update',
+        name: 'user-update',
+        component: loadView('user/Update'),
     }]
 });
 

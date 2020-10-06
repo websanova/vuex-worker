@@ -45,8 +45,6 @@ export default {
         },
 
         previous(state, fields) {
-            console.log(fields);
-
             Vue.set(state, 'previous', JSON.parse(JSON.stringify(fields)));
         },
 

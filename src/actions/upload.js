@@ -134,7 +134,9 @@ export default {
         },
 
         stage(state, getters) {
-            return getters['stage/data'];
-        }
+            return {
+                data: getters['stage/data'],
+            }
+        },
     }
 }

@@ -22,11 +22,5 @@ export default {
 
     request: {
         url: 'demos/users/list'
-    },
-
-    getters: {
-        test() {
-            return 'bah';
-        }
     }
 }

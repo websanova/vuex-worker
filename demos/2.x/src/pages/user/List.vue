@@ -83,19 +83,19 @@
             <div class="media-tight media-middle">
                 <ul class="spacer spacer-pipe text-sm">
                     <li>
-                        <a
-                            @click=""
+                        <router-link
+                            :to="{name: 'user-show', params: {user_id: user.id}}"
                         >
-                            update
-                        </a>
+                            show
+                        </router-link>
                     </li>
 
                     <li>
-                        <a
-                            @click=""
+                        <router-link
+                            :to="{name: 'user-update', params: {user_id: user.id}}"
                         >
-                            delete
-                        </a>
+                            update
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -146,6 +146,10 @@
                 state: this.$route.query.state,
                 query: this.$route.query.query,
             });
+        },
+
+        destroyed() {
+            this._worker.work('clear');
         },
 
         methods: {

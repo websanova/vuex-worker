@@ -9,7 +9,9 @@ export default {
 
     getters: {
         stage(state, getters) {
-            return getters['stage/data'];
-        }
+            return {
+                data: getters['stage/data'],
+            }
+        },
     }
 }
