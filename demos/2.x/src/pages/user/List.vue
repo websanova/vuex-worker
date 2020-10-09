@@ -168,9 +168,9 @@
         },
 
         mounted() {
-            if (
-                this._payload.form.status === null
-            ) {
+            var query = this._payload.filter.query;
+
+            if (this._payload.form.status === null) {
                 this.filter({
                     page: this.$route.query.page,
                     role: this.$route.query.role,
@@ -178,20 +178,15 @@
                     query: this.$route.query.query,
                 });
             }
-            // else {
-            //     this.$router.push({
-            //         query: {
-            //             page: this._payload.filter.fields.page,
-            //             role: this._payload.filter.fields.role,
-            //             state: this._payload.filter.fields.state,
-            //             query: this._payload.filter.fields.query,
-            //         }
-            //     });
-            // }
+            else if (Object.keys(query).length) {
+                this.$router.replace({
+                    query: query
+                });
+            }
         },
 
         destroyed() {
-            // NOTE: We can clear the worker if we want a
+            // NOTE: We can clear the worker if we want a reset
             //       upon return to the page from another page.
             //       Otherwise the data will stay in our store.
 

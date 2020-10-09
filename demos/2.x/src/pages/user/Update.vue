@@ -158,7 +158,6 @@
                     .then(() => {
                         this.$router.push({
                             name: 'user-list',
-                            query: this._payload.list.filter.query
                         });
                     });
             }
