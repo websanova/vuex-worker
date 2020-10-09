@@ -44,6 +44,42 @@ Copyright (C) 2011-2020 Websanova https://websanova.com
 
 
 
+## Problems
+
+So after many years of playing with Vue and Vuex I found I had quite a common set of problems which mainly came from fetching, displaying and manipulating data.
+
+These problems became quite routine and I watned a nice and consistent way to deal with them. We also want a way to easily deal with non-consistent scenarios in a way that doesn't confuse any patterns we use for reptitive code scenarios.
+
+One main thing I came to realize is that Vuex works very well as a nice data/state and code layer between my API and components. Sort of like the "C" in MVC type of pattern.
+
+So vuex should primary
+  a) store our data
+  b) sync / update data
+  c) handle all requests to the api
+
+Our components are then primary split into "logic" based and "element" based components. The "logic" based components then act as the glue layer between our Vuex store and our elements. The elements are done complete dummies that only accept props and emit events.
+
+Optionally we may create "widget" logic components which are something between a layout and element, for common arrangements such as listing a set of articles or items which are used throughout the app. This also useful for things like forms that we may want to repeatedly instert through the app. For instance a login box that might be used on a page and perhaps in a modal as well.
+
+
+
+- deal with multiple competing filters (for instance resetting state, also sets page to 1, hitting home link clearing all filters, etc)
+- filters in query params with watchers.
+- restore query filters when coming back to a page.
+- query filters on refresh should restore the data state.
+- data sync across components.
+- request handling (fire off requests in a consistent manner).
+- request error handling (consistent way to deal with errors).
+- response message handling (be able to manage message displays on requests, these should be optional).
+- form handling (able to hold state in cases like wizards where you can go back/forward).
+- data staging / "current" data (for tracking lists with alternate "current" / "selected" item).
+- namesapcing and organization.
+- consistent interface to deal with vuex.
+- dispatch chaining to avoid retyping namespaces.
+- able to hold state when moving across pages (with easy option to reset or not, should be able to toggle this easily with 1 line of code or option in a config/properties).
+
+
+
 
 ## Primer
 
