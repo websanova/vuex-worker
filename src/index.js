@@ -144,9 +144,9 @@ Vuex.Store.prototype.worker = function (path) {
 
         return chain
             .then(() => {
-                data.url    = data.url || (request.url instanceof Function ? request.url.call(_this, ctx, ctx.getters['worker/stage']) : request.url) ;
-                data.body   = data.body || (request.body instanceof Function ? request.body.call(_this, ctx, ctx.getters['worker/stage']) : request.body) || {};
-                data.params = data.params || (request.params instanceof Function ? request.params.call(_this, ctx, ctx.getters['worker/stage']) : request.params) || {};
+                data.url    = data.url || (request.url instanceof Function ? request.url.call(_this, ctx, chain.payload()) : request.url) ;
+                data.body   = data.body || (request.body instanceof Function ? request.body.call(_this, ctx, chain.payload()) : request.body) || {};
+                data.params = data.params || (request.params instanceof Function ? request.params.call(_this, ctx, chain.payload()) : request.params) || {};
                 data.msg    = data.msg !== undefined ? data.msg : request.msg;
                 data.clear  = data.clear !== undefined ? data.clear : request.clear;
                 data.silent = data.silent !== undefined ? data.silent : request.silent;
@@ -155,11 +155,11 @@ Vuex.Store.prototype.worker = function (path) {
             .dispatch('worker/send', data)
             .then((res) => {
                 if (request.success) {
-                    request.success.call(_this, ctx, res, ctx.getters['worker/stage']);
+                    request.success.call(_this, ctx, res, chain.payload());
                 }
             }, (res) => {
                 if (request.error) {
-                    request.error.call(_this, ctx, res, ctx.getters['worker/stage']);
+                    request.error.call(_this, ctx, res, chain.payload());
                 }
             });
     };

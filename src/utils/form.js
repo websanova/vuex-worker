@@ -51,6 +51,10 @@ export default {
             state.request = null;
         },
 
+        clearStatus(state) {
+            state.status = null;
+        },
+
         clearFields(state) {
             Vue.set(state, 'fields', {});
         },
@@ -92,6 +96,7 @@ export default {
         clear(ctx,) {
             ctx.commit('clearFields');
             ctx.commit('clearErrors');
+            ctx.commit('clearStatus')
         },
 
         update(ctx, data) {

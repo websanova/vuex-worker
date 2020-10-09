@@ -8,8 +8,8 @@ export default {
     },
 
     request: {
-        url(ctx, stage) {
-            return 'demos/users/' + stage.data.user.id +  '/fetch';
+        url(ctx, payload) {
+            return 'demos/users/' + payload.stage.data.user.id +  '/fetch';
         }
     }
 }

@@ -68,37 +68,61 @@
 
         <div
             v-else
-            v-for="user in _payload.data.items"
-            :key="user.id"
-            class="media"
         >
-            <div class="media-tight">
-                <img :src="user.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'" width="25" />
+            <div
+                v-for="user in _payload.data.items"
+                :key="user.id"
+                class="media"
+            >
+                <div class="media-tight">
+                    <img :src="user.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'" width="25" />
+                </div>
+
+                <div class="media-middle px-2">
+                    {{ user.id }} : {{ user.first_name }}
+                </div>
+
+                <div class="media-tight media-middle">
+                    <ul class="spacer spacer-pipe text-sm">
+                        <li>
+                            <router-link
+                                :to="{name: 'user-show', params: {user_id: user.id}}"
+                            >
+                                show
+                            </router-link>
+                        </li>
+
+                        <li>
+                            <router-link
+                                :to="{name: 'user-update', params: {user_id: user.id}}"
+                            >
+                                update
+                            </router-link>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="media-middle px-2">
-                {{ user.id }} : {{ user.first_name }}
+            <div
+                v-if="!(_payload.data.items || []).length"
+            >
+                No results.
             </div>
+        </div>
 
-            <div class="media-tight media-middle">
-                <ul class="spacer spacer-pipe text-sm">
-                    <li>
-                        <router-link
-                            :to="{name: 'user-show', params: {user_id: user.id}}"
-                        >
-                            show
-                        </router-link>
-                    </li>
+        <div
+            v-if="_pages > 1"
+        >
+            <hr />
 
-                    <li>
-                        <router-link
-                            :to="{name: 'user-update', params: {user_id: user.id}}"
-                        >
-                            update
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
+            <span
+                v-for="i in _pages"
+                class="mx-1 px-1 text-link"
+                v-bind:class="[i === _payload.data.current_page ? 'active' : '']"
+                @click="filter({page: i})"
+            >
+                {{ i }}
+            </span>
         </div>
     </div>
 </template>
@@ -118,6 +142,10 @@
 
             _payload() {
                 return this._worker.payload();
+            },
+
+            _pages() {
+                return Math.ceil(this._payload.data.total / this._payload.data.per_page);
             }
         },
 
@@ -140,16 +168,22 @@
         },
 
         mounted() {
-            this.filter({
-                page: this.$route.query.page,
-                role: this.$route.query.role,
-                state: this.$route.query.state,
-                query: this.$route.query.query,
-            });
+            if (this._payload.form.status === null) {
+                this.filter({
+                    page: this.$route.query.page,
+                    role: this.$route.query.role,
+                    state: this.$route.query.state,
+                    query: this.$route.query.query,
+                });
+            }
         },
 
         destroyed() {
-            this._worker.work('clear');
+            // NOTE: We can clear the worker if we want a
+            //       upon return to the page from another page.
+            //       Otherwise the data will stay in our store.
+
+            // this._worker.work('clear');
         },
 
         methods: {

@@ -70,9 +70,16 @@ select {
 
 a,
 .text-link {
+    display: inline-block;
     cursor: pointer;
     text-decoration: none;
     color: #6699ff;
+}
+
+a:hover,
+.text-link:hover,
+.text-link.active {
+    text-decoration: underline;
 }
 
 .text-muted {color: #dadada}
@@ -114,46 +121,20 @@ ul.spacer-pipe > li:not(:last-child)::after {
 /**************************************
  * DISPLAY
  **************************************/
-.px-1 {
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-}
+.px-1 {padding-left: 0.5em; padding-right: 0.5em;}
+.px-2 {padding-left: 0.8em; padding-right: 0.8em;}
+.px-3 {padding-left: 1.3em; padding-right: 1.3em;}
+.px-4 {padding-left: 2em; padding-right: 2em;}
 
-.px-2 {
-    padding-left: 0.8em;
-    padding-right: 0.8em;
-}
+.py-1 {padding-top: 0.5em; padding-bottom: 0.5em;}
+.py-2 {padding-top: 0.8em; padding-bottom: 0.8em;}
+.py-3 {padding-top: 1.3em; padding-bottom: 1.3em;}
+.py-4 {padding-top: 2em; padding-bottom: 2em;}
 
-.px-3 {
-    padding-left: 1.3em;
-    padding-right: 1.3em;
-}
-
-.px-4 {
-    padding-left: 2em;
-    padding-right: 2em;
-}
-
-.py-1 {
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-}
-
-.py-2 {
-    padding-top: 0.8em;
-    padding-bottom: 0.8em;
-}
-
-.py-3 {
-    padding-top: 1.3em;
-    padding-bottom: 1.3em;
-}
-
-.py-4 {
-    padding-top: 2em;
-    padding-bottom: 2em;
-}
-
+.mx-1 {margin-left: 0.5em; margin-right: 0.5em;}
+.mx-2 {margin-left: 0.8em; margin-right: 0.8em;}
+.mx-3 {margin-left: 1.3em; margin-right: 1.3em;}
+.mx-4 {margin-left: 2em; margin-right: 2em;}
 
 /**************************************
  * SPINNER

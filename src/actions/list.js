@@ -163,6 +163,7 @@ export default {
 
         clear(ctx) {
             ctx.commit('data', {});
+            ctx.dispatch('form/clear');
         }
     },
 
