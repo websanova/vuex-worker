@@ -38,6 +38,8 @@ Copyright (C) 2011-2020 Websanova https://websanova.com
 
 ## TODO
 
+- create
+- avatar (on update page).
 - setup List component (as example).
 
 

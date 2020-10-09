@@ -188,6 +188,10 @@ export default {
                         silent: data.silent
                     });
 
+                    if (data.before) {
+                        data.before();
+                    }
+
                     Vue.http({
                             method: data.method || 'get',
                             url: data.url,

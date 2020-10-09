@@ -56,6 +56,8 @@ export default {
         send(ctx, data) {
             var i,
                 body,
+                _this = this,
+                success,
                 filters = ctx.state.filter.data;
 
             data = data || {};
@@ -69,18 +71,19 @@ export default {
                 }
             }
 
+            success = data.success;
+
+            data.success = function (res) {
+                ctx.commit('data', res.data.data);
+
+                if (success) {
+                    success.apply(_this, arguments);
+                }
+            }
+
             return new Promise((resolve, reject) => {
                 ctx
-                .dispatch('form/send', {
-                    url: data.url,
-                    abort: data.abort,
-                    silent: data.silent,
-                    method: data.method,
-                    body: body,
-                    success(res) {
-                        ctx.commit('data', res.data.data);
-                    }
-                })
+                .dispatch('form/send', data)
                 .then(resolve, reject)
                 .catch(() => {
                     // TODO: Nothing

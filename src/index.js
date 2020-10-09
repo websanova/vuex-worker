@@ -157,9 +157,17 @@ Vuex.Store.prototype.worker = function (path) {
 
                 for (i = 0, ii = actions.length; i < ii; i++) {
                     ((i) => {
+                        var args = [ctx];
+
                         if (request[actions[i]]) {
                             data[actions[i]] = function (res) {
-                                request[actions[i]].call(_this, ctx, res, chain.payload());
+                                if (res) {
+                                    args.push(res);
+                                }
+
+                                args.push(chain.payload());
+
+                                request[actions[i]].apply(_this, args);
                             }
                         }
                     })(i);
