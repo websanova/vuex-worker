@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="media m-0">
-            <div>
+            <div class="media-middle">
                 <span
                     v-show="_payload.fetch.form.loading"
                     class="spinner"
