@@ -1,5 +1,6 @@
-import list  from './list';
-import fetch from './fetch';
+import list   from './list';
+import fetch  from './fetch';
+import update from './update';
 
 export default {
     namespaced: true,
@@ -7,5 +8,6 @@ export default {
     modules: {
         list,
         fetch,
+        update,
     }
 }

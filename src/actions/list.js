@@ -88,77 +88,67 @@ export default {
             })
         },
 
-        prepend(ctx, data) {
+        action (ctx, data) {
             var index;
 
             if (
-                data &&
+                data.cb &&
+                data.data &&
                 ctx.state.data &&
                 ctx.state.data.items &&
                 ctx.state.data.items.constructor === Array
             ) {
-                index = findIndexByKey(ctx.state.data.items, data.id);
+                index = findIndexByKey(ctx.state.data.items, data.data.id);
 
-                if (index < 0) {
-                    ctx.commit('prepend', data);
-                }
+                data.cb(index, data.data);
             }
+        },
+
+        prepend(ctx, data) {
+            ctx.dispatch('action', {
+                data: data,
+                cb(index, data) {
+                    if (index < 0) {
+                        ctx.commit('prepend', data);
+                    }
+                }
+            });
         },
 
         append(ctx, data) {
-            var index;
-
-            if (
-                data &&
-                ctx.state.data &&
-                ctx.state.data.items &&
-                ctx.state.data.items.constructor === Array
-            ) {
-                index = findIndexByKey(ctx.state.data.items, data.id);
-
-                if (index < 0) {
-                    ctx.commit('append', data);
+            ctx.dispatch('action', {
+                data: data,
+                cb(index, data) {
+                    if (index < 0) {
+                        ctx.commit('append', data);
+                    }
                 }
-            }
+            });
         },
 
         sync(ctx, data) {
-            if (
-                data &&
-                ctx.state.data &&
-                ctx.state.data.items &&
-                ctx.state.data.items.constructor === Array
-            ) {
-                ctx.commit('sync', {
-                    index: findIndexByKey(ctx.state.data.items, data.id, 'id'),
-                    data: data
-                });
-            }
+            ctx.dispatch('action', {
+                data: data,
+                cb(index, data) {
+                    ctx.commit('sync', {
+                        index: index,
+                        data: data
+                    });
+                }
+            });
         },
 
         remove(ctx, data) {
-            if (
-                data &&
-                ctx.state.data &&
-                ctx.state.data.items &&
-                ctx.state.data.items.constructor === Array
-            ) {
-                ctx.commit('remove', findIndexByKey(ctx.state.data.items, data.id, 'id'));
-            }
+            ctx.dispatch('action', {
+                data: data,
+                cb(index, data) {
+                    ctx.commit('remove', index);
+                }
+            });
         },
 
-        /**
-         * Update items set.
-         */ 
         items(ctx, data) {
-            if (
-                data &&
-                ctx.state.data &&
-                ctx.state.data.items &&
-                ctx.state.data.items.constructor === Array
-            ) {
-                ctx.commit('items', data);
-            }
+            ctx.commit('items', data);
         },
 
         clear(ctx) {

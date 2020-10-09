@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="media-middle px-2">
-                    {{ user.id }} : {{ user.first_name }}
+                    {{ user.id }} : {{ user.first_name }} {{ user.last_name }}
                 </div>
 
                 <div class="media-tight media-middle">

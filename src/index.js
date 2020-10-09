@@ -151,17 +151,20 @@ Vuex.Store.prototype.worker = function (path) {
                 data.clear  = data.clear !== undefined ? data.clear : request.clear;
                 data.silent = data.silent !== undefined ? data.silent : request.silent;
                 data.abort  = data.abort !== undefined ? data.abort : request.abort;
-            })
-            .dispatch('worker/send', data)
-            .then((res) => {
+
                 if (request.success) {
-                    request.success.call(_this, ctx, res, chain.payload());
+                    data.success = function (res) {
+                        request.success.call(_this, ctx, res, chain.payload());
+                    }
                 }
-            }, (res) => {
+
                 if (request.error) {
-                    request.error.call(_this, ctx, res, chain.payload());
+                    data.error = function (res) {
+                        request.error.call(_this, ctx, res, chain.payload());
+                    }
                 }
-            });
+            })
+            .dispatch('worker/send', data);
     };
 
     chain.getters = function(key) {

@@ -1,5 +1,5 @@
-import form  from 'LIB/store/utils/form';
-import stage from 'LIB/store/utils/stage';
+import form  from '../utils/form';
+import stage from '../utils/stage';
 
 export default {
     namespaced: true,
@@ -16,6 +16,11 @@ export default {
             data.method = data.method || 'PUT';
 
             return ctx.dispatch('form/send', data);
+        },
+
+        clear(ctx) {
+            ctx.dispatch('form/clear');
+            ctx.dispatch('stage/clear');
         }
     },
 
