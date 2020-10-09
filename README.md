@@ -38,8 +38,8 @@ Copyright (C) 2011-2020 Websanova https://websanova.com
 
 ## TODO
 
-- Fix filter previous check... should not be triggering send if no change....
 - clean up stage update, should append note reset.
+- setup List component (as example).
 
 
 

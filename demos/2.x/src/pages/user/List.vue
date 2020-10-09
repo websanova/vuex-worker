@@ -21,7 +21,7 @@
 
                     <li>
                         <span
-                            v-show="_payload.form.loading"
+                            v-show="_payload.list.form.loading"
                             class="spinner"
                         />
                     </li>
@@ -32,7 +32,7 @@
                 <ul class="spacer">
                     <li>
                         <select
-                            :value="_payload.filter.fields.role"
+                            :value="_payload.list.filter.fields.role"
                             @change="filter({role: $event.target.value})"
                         >
                             <option value="">All Roles</option>
@@ -44,7 +44,7 @@
 
                     <li>
                         <select
-                            :value="_payload.filter.fields.state"
+                            :value="_payload.list.filter.fields.state"
                             @change="filter({state: $event.target.value})"
                         >
                             <option value="">All States</option>
@@ -59,7 +59,7 @@
         <hr/>
 
         <div
-            v-if="_payload.form.loading && !_payload.form.silent"
+            v-if="_payload.list.form.loading && !_payload.list.form.silent"
         >
             <span class="spinner">
                 Loading...
@@ -70,7 +70,7 @@
             v-else
         >
             <div
-                v-for="user in _payload.data.items"
+                v-for="user in _payload.list.data.items"
                 :key="user.id"
                 class="media"
             >
@@ -84,7 +84,9 @@
 
                 <div class="media-tight media-middle">
                     <ul class="spacer spacer-pipe text-sm">
-                        <li>
+                        <li
+                            v-if="user.is_active"
+                        >
                             <router-link
                                 :to="{name: 'user-show', params: {user_id: user.id}}"
                             >
@@ -92,19 +94,32 @@
                             </router-link>
                         </li>
 
-                        <li>
+                        <li
+                            v-if="user.is_active"
+                        >
                             <router-link
                                 :to="{name: 'user-update', params: {user_id: user.id}}"
                             >
                                 update
                             </router-link>
                         </li>
+
+                        <li
+                            v-if="!user.is_active"
+                        >
+                            <span
+                                class="text-link"
+                                @click="undelete(user)"
+                            >
+                                undelete
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
 
             <div
-                v-if="!(_payload.data.items || []).length"
+                v-if="!(_payload.list.data.items || []).length"
             >
                 No results.
             </div>
@@ -118,7 +133,7 @@
             <span
                 v-for="i in _pages"
                 class="mx-1 px-1 text-link"
-                v-bind:class="[i === _payload.data.current_page ? 'active' : '']"
+                v-bind:class="[i === _payload.list.data.current_page ? 'active' : '']"
                 @click="filter({page: i})"
             >
                 {{ i }}
@@ -137,15 +152,21 @@
 
         computed: {
             _worker() {
-                return this.$store.worker('demo/user/list');
+                return {
+                    list: this.$store.worker('demo/user/list'),
+                    undelete: this.$store.worker('demo/user/undelete'),
+                }
             },
 
             _payload() {
-                return this._worker.payload();
+                return {
+                    list: this._worker.list.payload(),
+                    undelete: this._worker.undelete.payload(),
+                }
             },
 
             _pages() {
-                return Math.ceil(this._payload.data.total / this._payload.data.per_page);
+                return Math.ceil(this._payload.list.data.total / this._payload.list.data.per_page);
             }
         },
 
@@ -168,9 +189,9 @@
         },
 
         mounted() {
-            var query = this._payload.filter.query;
+            var query = this._payload.list.filter.query;
 
-            if (this._payload.form.status === null) {
+            if (this._payload.list.form.status === null) {
                 this.filter({
                     page: this.$route.query.page,
                     role: this.$route.query.role,
@@ -190,18 +211,26 @@
             //       upon return to the page from another page.
             //       Otherwise the data will stay in our store.
 
-            // this._worker.work('clear');
+            // this._worker.list.work('clear');
         },
 
         methods: {
             filter(data) {
                 this._worker
+                    .list
                     .work('filter/update', data)
                     .request();
             },
 
             request(data) {
-                this._worker.request(data);
+                this._worker.list.request(data);
+            },
+
+            undelete(user) {
+                this._worker
+                    .undelete
+                    .work('stage/update', {user: user})
+                    .request();
             }
         }
     }
