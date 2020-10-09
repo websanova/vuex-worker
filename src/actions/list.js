@@ -164,6 +164,7 @@ export default {
         clear(ctx) {
             ctx.commit('data', {});
             ctx.dispatch('form/clear');
+            ctx.dispatch('stage/clear');
         }
     },
 
@@ -193,6 +194,20 @@ export default {
 
         data(state) {
             return state.data;
-        }
+        },
+
+        find(state) {
+            return (data) => {
+                var index;
+
+                if (state.data.items) {
+                    index = findIndexByKey(state.data.items, data.id, 'id');
+                    
+                    return state.data.items[index];
+                }
+                
+                return;
+            };
+        },
     }
 }

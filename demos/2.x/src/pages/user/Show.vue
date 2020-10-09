@@ -50,13 +50,20 @@
         },
 
         mounted() {
-            this._worker
-                .work('stage/update', {
-                    user: {
-                        id: this.$route.params.user_id
-                    }
-                })
-                .request();
+            var data = {
+                id: this.$route.params.user_id
+            };
+            
+            var user = this.$store.getters['demo/user/list/worker/find'](data);
+
+            if (user) {
+                this._worker.work('data', user);
+            }
+            else {
+                this._worker
+                    .work('stage/update', {user: data})
+                    .request();
+            }
         },
 
         destroyed() {

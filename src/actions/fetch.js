@@ -48,6 +48,11 @@ export default {
             ctx.commit('sync', data);
         },
 
+        data(ctx, data) {
+            ctx.commit('data', data);
+            ctx.dispatch('form/success');
+        },
+
         clear(ctx) {
             ctx.commit('data', {});
             ctx.dispatch('form/clear');

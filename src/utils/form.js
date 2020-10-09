@@ -116,7 +116,7 @@ export default {
                 ctx.commit('clearFields');
             }
 
-            if (ctx.state.msg && res.data.msg) {
+            if (ctx.state.msg && res && res.data.msg) {
                 this.dispatch('alert/success', res.data.msg);
             }
         },
