@@ -1,16 +1,26 @@
 <template>
     <div>
-        <div>
-            <span
-                v-show="_payload.fetch.form.loading"
-                class="spinner"
-            />
+        <div class="media m-0">
+            <div>
+                <span
+                    v-show="_payload.fetch.form.loading"
+                    class="spinner"
+                />
 
-            <span class="text-bold">
-                {{ _payload.fetch.data.first_name }} {{ _payload.fetch.data.last_name }} 
-            </span>
+                <span class="text-bold">
+                    {{ _payload.fetch.data.first_name }} {{ _payload.fetch.data.last_name }} 
+                </span>
 
-            &#8203;
+                &#8203;
+            </div>
+
+            <div class="media-tight">
+                <button
+                    @click="userDelete"
+                >
+                    delete
+                </button>
+            </div>
         </div>
 
         <hr/>
@@ -45,7 +55,7 @@
                     >
                         <li>
                             <button
-                                @click="_worker.update.request()"
+                                @click="userUpdate"
                                 :disabled="_payload.update.form.loading"
                             >
                                 Update
@@ -78,13 +88,16 @@
         computed: {
             _worker() {
                 return {
+                    list: this.$store.worker('demo/user/list'),
                     fetch: this.$store.worker('demo/user/fetch'),
                     update: this.$store.worker('demo/user/update'),
+                    delete: this.$store.worker('demo/user/delete'),
                 };
             },
 
             _payload() {
                 return {
+                    list: this._worker.list.payload(),
                     fetch: this._worker.fetch.payload(),
                     update: this._worker.update.payload(),
                 };
@@ -101,7 +114,7 @@
             if (user) {
                 this._worker.fetch.work('data', user);
                 
-                this.setUser(user);
+                this.userReset(user);
             }
             else {
                 this._worker
@@ -116,16 +129,38 @@
 
         methods: {
             reset() {
-                this.setUser(this._payload.fetch.data);
+                this.userReset(this._payload.fetch.data);
             },
 
-            setUser(user) {
+            userReset(user) {
+                this._worker
+                    .delete
+                    .work('stage/update', {
+                        user: user
+                    });
+
                 this._worker
                     .update
                     .work('stage/update', {
                         user: user
                     })
                     .dispatch('reset', user);
+            },
+
+            userUpdate() {
+                this._worker.update.request();
+            },
+
+            userDelete() {
+                this._worker
+                    .delete
+                    .request()
+                    .then(() => {
+                        this.$router.push({
+                            name: 'user-list',
+                            query: this._payload.list.filter.query
+                        });
+                    });
             }
         },
 

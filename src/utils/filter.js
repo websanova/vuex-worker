@@ -152,6 +152,22 @@ export default {
             return fields;
         },
 
+        query(state) {
+            var i,
+                query = {};
+
+            for (i in state.data) {
+                if (
+                    state.data[i].show !== false &&
+                    state.data[i].default !== state.data[i].value
+                ) {
+                    query[i] = state.data[i].value;
+                }
+            }
+
+            return query;
+        },
+
         isChange(state, getters) {
             return JSON.stringify(state.previous) !== JSON.stringify(getters.fields);
         }

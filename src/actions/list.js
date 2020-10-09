@@ -178,6 +178,7 @@ export default {
         filter(state, getters) {
             return {
                 data: getters['filter/data'],
+                query: getters['filter/query'],
                 fields: getters['filter/fields'],
             };
         },

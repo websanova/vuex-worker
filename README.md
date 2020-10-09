@@ -38,7 +38,7 @@ Copyright (C) 2011-2020 Websanova https://websanova.com
 
 ## TODO
 
-- clean up filter previous / fields / data
+- Fix filter previous check... should not be triggering send if no change....
 - clean up stage update, should append note reset.
 
 

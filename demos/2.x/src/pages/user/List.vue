@@ -168,7 +168,9 @@
         },
 
         mounted() {
-            if (this._payload.form.status === null) {
+            if (
+                this._payload.form.status === null
+            ) {
                 this.filter({
                     page: this.$route.query.page,
                     role: this.$route.query.role,
@@ -176,6 +178,16 @@
                     query: this.$route.query.query,
                 });
             }
+            // else {
+            //     this.$router.push({
+            //         query: {
+            //             page: this._payload.filter.fields.page,
+            //             role: this._payload.filter.fields.role,
+            //             state: this._payload.filter.fields.state,
+            //             query: this._payload.filter.fields.query,
+            //         }
+            //     });
+            // }
         },
 
         destroyed() {

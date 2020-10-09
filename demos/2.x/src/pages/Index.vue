@@ -21,7 +21,7 @@
         <hr/>
 
         <div class="text-center">
-            <router-link :to="{name: 'user-list'}">Home</router-link>
+            <router-link :to="{name: 'user-list', query: $store.getters['demo/user/list/worker/filter/query']}">Home</router-link>
         </div>
 
         <hr/>
