@@ -192,12 +192,15 @@
             var query = this._payload.list.filter.query;
 
             if (this._payload.list.form.status === null) {
-                this.filter({
-                    page: this.$route.query.page,
-                    role: this.$route.query.role,
-                    state: this.$route.query.state,
-                    query: this.$route.query.query,
-                });
+                this._worker
+                    .list
+                    .work('filter/update', {
+                        page: this.$route.query.page,
+                        role: this.$route.query.role,
+                        state: this.$route.query.state,
+                        query: this.$route.query.query,
+                    })
+                    .request();
             }
             else if (Object.keys(query).length) {
                 this.$router.replace({
@@ -219,7 +222,11 @@
                 this._worker
                     .list
                     .work('filter/update', data)
-                    .request();
+                    .then(() => {
+                        if (this._payload.list.filter.isChange) {
+                            this._worker.list.request();
+                        }
+                    });
             },
 
             request(data) {

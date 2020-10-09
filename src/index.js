@@ -144,6 +144,9 @@ Vuex.Store.prototype.worker = function (path) {
 
         return chain
             .then(() => {
+                var i, ii,
+                    actions = ['before', 'success', 'error'];
+
                 data.url    = data.url || (request.url instanceof Function ? request.url.call(_this, ctx, chain.payload()) : request.url) ;
                 data.body   = data.body || (request.body instanceof Function ? request.body.call(_this, ctx, chain.payload()) : request.body) || {};
                 data.params = data.params || (request.params instanceof Function ? request.params.call(_this, ctx, chain.payload()) : request.params) || {};
@@ -152,16 +155,14 @@ Vuex.Store.prototype.worker = function (path) {
                 data.silent = data.silent !== undefined ? data.silent : request.silent;
                 data.abort  = data.abort !== undefined ? data.abort : request.abort;
 
-                if (request.success) {
-                    data.success = function (res) {
-                        request.success.call(_this, ctx, res, chain.payload());
-                    }
-                }
-
-                if (request.error) {
-                    data.error = function (res) {
-                        request.error.call(_this, ctx, res, chain.payload());
-                    }
+                for (i = 0, ii = actions.length; i < ii; i++) {
+                    ((i) => {
+                        if (request[actions[i]]) {
+                            data[actions[i]] = function (res) {
+                                request[actions[i]].call(_this, ctx, res, chain.payload());
+                            }
+                        }
+                    })(i);
                 }
             })
             .dispatch('worker/send', data);

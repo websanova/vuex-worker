@@ -38,7 +38,6 @@ Copyright (C) 2011-2020 Websanova https://websanova.com
 
 ## TODO
 
-- clean up stage update, should append note reset.
 - setup List component (as example).
 
 
@@ -62,7 +61,6 @@ Our components are then primary split into "logic" based and "element" based com
 Optionally we may create "widget" logic components which are something between a layout and element, for common arrangements such as listing a set of articles or items which are used throughout the app. This also useful for things like forms that we may want to repeatedly instert through the app. For instance a login box that might be used on a page and perhaps in a modal as well.
 
 
-
 - deal with multiple competing filters (for instance resetting state, also sets page to 1, hitting home link clearing all filters, etc)
 - filters in query params with watchers.
 - restore query filters when coming back to a page.
@@ -77,6 +75,7 @@ Optionally we may create "widget" logic components which are something between a
 - consistent interface to deal with vuex.
 - dispatch chaining to avoid retyping namespaces.
 - able to hold state when moving across pages (with easy option to reset or not, should be able to toggle this easily with 1 line of code or option in a config/properties).
+- Vuex hooks for initializing things directly in Vuex (rather then peppering these things around in our page components).
 
 
 

@@ -180,6 +180,7 @@ export default {
                 data: getters['filter/data'],
                 query: getters['filter/query'],
                 fields: getters['filter/fields'],
+                isChange: getters['filter/isChange'],
             };
         },
 
