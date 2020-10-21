@@ -32,8 +32,9 @@
 
     export default {
 
-        // TODO: Would be better to use Vue 3 composable here to import
-        //       specific functions we need as this could get messy fast.
+        // TODO: Would be better to use Vue 3 composables here rather than
+        //       mixins to import specific functions. For instance multiple
+        //       functions to use on "mounted". With mixins this gets messy.
 
         mixins: [mxnList({
             clearOnDestroy: false
