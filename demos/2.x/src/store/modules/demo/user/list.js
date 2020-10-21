@@ -13,9 +13,24 @@ export default {
             this.worker('demo/user/list')
                 .work('filter/reset', {
                     page: 1,
-                    role: '',
-                    state: '',
                     query: '',
+                    role: {
+                        default: '',
+                        options: [
+                            {value: '', label: 'All Roles'},
+                            'super',
+                            'editor',
+                            'user'
+                        ],
+                    },
+                    state: {
+                        default: '',
+                        options: [
+                            {value: '', label: 'All States'},
+                            'active',
+                            'deleted'
+                        ]
+                    }
             });
         }
     },

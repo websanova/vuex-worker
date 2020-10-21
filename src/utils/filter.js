@@ -16,12 +16,31 @@ export default {
     mutations: {
         reset(state, filters) {
             var i,
+                j, jj,
                 query = Vue.router.app.$route.query,
                 params = Vue.router.app.$route.params,
+                options,
+                labelKey,
+                valueKey,
+                filterOptions,
                 ddefault,
                 data = {};
 
             for (i in filters) {
+                options = [];
+                labelKey = (filters[i].options || {}).labelKey || 'label';
+                valueKey = (filters[i].options || {}).valueKey || 'value';
+                filterOptions = (filters[i].options || {}).list || filters[i].options;
+
+                if (filterOptions) {
+                    for (j = 0, jj = filterOptions.length; j < jj; j++) {
+                        options.push({
+                            label: (filterOptions[j][labelKey] !== undefined ? filterOptions[j][labelKey] : filterOptions[j]),
+                            value: (filterOptions[j][valueKey] !== undefined ? filterOptions[j][valueKey] : filterOptions[j]),
+                        });
+                    }
+                }
+                
                 ddefault = filters[i].default !== undefined ? filters[i].default : filters[i];
 
                 data[i] = {
@@ -29,7 +48,8 @@ export default {
                     default: ddefault,
                     value: filters[i].value !== undefined ? filters[i].value : (query[i] !== undefined ? query[i] : (params[i] !== undefined ? params[i] : ddefault)),
                     show: filters[i].show,
-                    reset: filters[i].reset || []
+                    reset: filters[i].reset || [],
+                    options: options.length ? options : null,
                 };
 
                 if (data[i].reset.constructor !== Array) {
