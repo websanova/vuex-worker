@@ -65,7 +65,7 @@
             v-else
         >
             <template
-                v-for="(item,index) in data[itemsKey]"
+                v-for="(item,index) in _items"
             >
                 <slot
                     name="item"
@@ -75,7 +75,7 @@
             </template>
 
             <div
-                v-if="!(data.items || []).length"
+                v-if="!_items.length"
             >
                 No results.
             </div>
@@ -89,7 +89,7 @@
             <span
                 v-for="i in _pages"
                 class="mx-1 px-1 text-link"
-                v-bind:class="[i === data[currentPageKey] ? 'active' : '']"
+                v-bind:class="[i === currentPage ? 'active' : '']"
                 @click="emitFilter('page', i)"
             >
                 {{ i }}
@@ -101,34 +101,25 @@
 <script>
     export default {
         props: {
-            data: Object,
+            items: Array,
+            total: Number,
+            perPage: Number,
+            currentPage: Number,
             status: String,
             filters: Object,
-
-            itemsKey: {
-                type: String,
-                default: 'items'
-            },
-
-            totalKey: {
-                type: String,
-                default: 'total'
-            },
-
-            perPageKey: {
-                type: String,
-                default: 'per_page'
-            },
-
-            currentPageKey: {
-                type: String,
-                default: 'current_page'
-            }
         },
 
         computed: {
+            _items() {
+                return this.items || [];
+            },
+
             _pages() {
-                return Math.ceil(this.data[this.totalKey] / this.data[this.perPageKey]);
+                if (this.total && this.perPage) {
+                    return Math.ceil(this.total / this.perPage);
+                }
+
+                return 0;
             },
 
             _isLoading() {

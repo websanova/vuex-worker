@@ -1,7 +1,10 @@
 <template>
     <div>
         <this-list
-            :data="_payload.list.data"
+            :items="_payload.list.data.items"
+            :total="_payload.list.data.total"
+            :per-page="_payload.list.data.per_page"
+            :current-page="_payload.list.data.current_page"
             :status="_payload.list.form.status"
             :filters="_payload.list.filter.data"
             @refresh="request"
@@ -14,9 +17,9 @@
                 :key="item.id"
                 :id="item.id"
                 :avatar="item.avatar"
-                :first_name="item.first_name"
-                :last_name="item.last_name"
-                :is_active="item.is_active"
+                :first-name="item.first_name"
+                :last-name="item.last_name"
+                :is-active="item.is_active"
                 @view="$router.push({name: 'user-show', params: {user_id: item.id}})"
                 @update="$router.push({name: 'user-update', params: {user_id: item.id}})"
                 @undelete="undelete(item)"

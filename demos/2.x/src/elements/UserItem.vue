@@ -7,13 +7,13 @@
         </div>
 
         <div class="media-middle px-2">
-            {{ id }} : {{ first_name }} {{ last_name }}
+            {{ id }} : {{ firstName }} {{ lastName }}
         </div>
 
         <div class="media-tight media-middle">
             <ul class="spacer spacer-pipe text-sm">
                 <li
-                    v-if="is_active"
+                    v-if="isActive"
                 >
                     <span
                         class="text-link"
@@ -24,7 +24,7 @@
                 </li>
 
                 <li
-                    v-if="is_active"
+                    v-if="isActive"
                 >
                     <span
                         class="text-link"
@@ -35,7 +35,7 @@
                 </li>
 
                 <li
-                    v-if="!is_active"
+                    v-if="!isActive"
                 >
                     <span
                         class="text-link"
@@ -54,9 +54,9 @@
         props: {
             id: Number,
             avatar: String,
-            first_name: String,
-            last_name: String,
-            is_active: Boolean,
+            firstName: String,
+            lastName: String,
+            isActive: Boolean,
         }
     }
 </script>
