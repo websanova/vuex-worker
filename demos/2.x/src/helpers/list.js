@@ -28,12 +28,10 @@ export function destroyed(worker) {
 };
 
 export function filter(worker, data) {
-    var payload = worker.payload();
-
     worker
         .work('filter/update', data)
         .then(() => {
-            if (payload.filter.isChange) {
+            if (worker.payload().filter.isChange) {
                 worker.request();
             }
         });
