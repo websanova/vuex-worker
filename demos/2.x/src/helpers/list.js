@@ -31,7 +31,9 @@ export function filter(worker, data) {
     worker
         .work('filter/update', data)
         .then(() => {
-            if (worker.payload().filter.isChange) {
+            var payload = worker.payload();
+
+            if (payload.filter.isChange) {
                 worker.request();
             }
         });

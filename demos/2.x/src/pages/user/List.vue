@@ -41,13 +41,13 @@
                 return {
                     list: this.$store.worker('demo/user/list'),
                     undelete: this.$store.worker('demo/user/undelete'),
-                }
+                };
             },
 
             _payload() {
                 return {
                     list: this._worker.list.payload(),
-                }
+                };
             }
         },
 

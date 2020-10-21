@@ -69,7 +69,11 @@ export default {
         },
 
         update(state, data) {
-            Vue.set(state, 'data', data);
+            var i;
+
+            for (i in data) {
+                Vue.set(state.data, i, data[i]);
+            }
         },
 
         timer(state, timer) {
@@ -92,8 +96,6 @@ export default {
                 reset = null,
                 timer = null,
                 data = JSON.parse(JSON.stringify(ctx.state.data));
-
-            ctx.commit('previous', ctx.getters['fields']);
 
             for (i in filters) {
                 (function (i) {
@@ -118,6 +120,8 @@ export default {
 
             timer = setTimeout(() => {
                 ctx.dispatch('path');
+
+                ctx.commit('previous', ctx.getters['fields']);
             }, 50);
 
             ctx.commit('timer', timer);
