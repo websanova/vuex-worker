@@ -22,27 +22,20 @@
                 :is-active="item.is_active"
                 @view="$router.push({name: 'user-show', params: {user_id: item.id}})"
                 @update="$router.push({name: 'user-update', params: {user_id: item.id}})"
-                @undelete="undelete(item)"
+                @undelete="undelete({user: item})"
             />
         </this-list>
     </div>
 </template>
 
 <script>
-    import mxnList      from '../../mixins/list.js';
-    import ThisList     from '../../elements/List.vue';
-    import ThisUserItem from '../../elements/UserItem.vue';
+    import * as list     from '../../helpers/list.js';
+    import * as undelete from '../../helpers/undelete.js';
+    
+    import ThisList      from '../../elements/List.vue';
+    import ThisUserItem  from '../../elements/UserItem.vue';
 
     export default {
-
-        // TODO: Would be better to use Vue 3 composables here rather than
-        //       mixins to import specific functions. For instance multiple
-        //       functions to use on "mounted". With mixins this gets messy.
-
-        mixins: [mxnList({
-            clearOnDestroy: false
-        })],
-
         computed: {
             _worker() {
                 return {
@@ -54,8 +47,33 @@
             _payload() {
                 return {
                     list: this._worker.list.payload(),
-                    undelete: this._worker.undelete.payload(),
                 }
+            }
+        },
+
+        mounted() {
+            list.mounted(this._worker.list);
+        },
+
+        destroyed() {
+            // NOTE: We can clear the worker if we want a reset
+            //       upon return to the page from another page.
+            //       Otherwise the data will stay in our store.
+
+            // list.destroyed(this._worker.list);
+        },
+
+        methods: {
+            filter(data) {
+                list.filter(this._worker.list, data);
+            },
+
+            request(data) {
+                list.request(this._worker.list, data);
+            },
+
+            undelete(data) {
+                undelete.request(this._worker.undelete, data);
             }
         },
 
