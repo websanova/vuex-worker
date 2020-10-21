@@ -52,7 +52,12 @@
         },
 
         mounted() {
-            list.mounted(this._worker.list);
+            list.mounted(this._worker.list, {
+                page: this.$route.query.page,
+                role: this.$route.query.role,
+                state: this.$route.query.state,
+                query: this.$route.query.query,
+            });
         },
 
         destroyed() {

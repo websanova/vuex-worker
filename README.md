@@ -38,6 +38,10 @@ Copyright (C) 2011-2020 Websanova https://websanova.com
 
 ## TODO
 
+- build
+- clean up docs
+
+
 
 
 ## Problems
