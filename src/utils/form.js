@@ -155,7 +155,9 @@ export default {
         },
 
         send(ctx, data) {
-            var timer;
+            var body,
+                timer,
+                token;
 
             data = data || {};
 
@@ -192,11 +194,25 @@ export default {
                         data.before();
                     }
 
-                    Vue.http({
+                    body = Object.assign({}, data.body, ctx.state.fields);
+
+                    if (Vue.axios && Vue.axios.CancelToken) {
+                        token = Vue.axios.CancelToken.source().token;
+
+                        ctx.commit('request', {
+                            abort: function () {
+                                token.cancel();
+                            }
+                        });
+                    }
+
+                    (Vue.http || Vue.axios)({
                             method: data.method || 'get',
                             url: data.url,
                             params: data.body || data.params,
-                            body: Object.assign({}, data.body, ctx.state.fields),
+                            body: body,
+                            data: body,
+                            cancelToken: token,
                             before: function(req) {
                                 ctx.commit('request', req);
                             }
