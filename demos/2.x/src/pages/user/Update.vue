@@ -1,12 +1,9 @@
 <template>
-    <div>
+    <this-load
+        :status="_payload.fetch.form.status"
+    >
         <div class="media m-0">
             <div class="media-middle">
-                <span
-                    v-show="_payload.fetch.form.loading"
-                    class="spinner"
-                />
-
                 <span class="text-bold">
                     {{ _payload.fetch.data.first_name }} {{ _payload.fetch.data.last_name }} 
                 </span>
@@ -16,7 +13,7 @@
 
             <div class="media-tight">
                 <button
-                    @click="userDelete"
+                    @click="this.delete"
                 >
                     delete
                 </button>
@@ -55,7 +52,7 @@
                     >
                         <li>
                             <button
-                                @click="userUpdate"
+                                @click="update"
                                 :disabled="_payload.update.form.loading"
                             >
                                 Update
@@ -63,7 +60,7 @@
                         </li>
                         <li>
                             <button
-                                @click="reset"
+                                @click="reset(_payload.fetch.data)"
                                 :disabled="_payload.update.form.loading"
                             >
                                 Reset
@@ -80,10 +77,16 @@
                 </td>
             </tr>
         </table>
-    </div>
+    </this-load>
 </template>
 
 <script>
+    import * as fetch  from '../../helpers/fetch.js';
+    import * as update from '../../helpers/update.js';
+    import * as deleat from '../../helpers/delete.js';
+
+    import ThisLoad    from '../../elements/Load.vue';
+
     export default {
         computed: {
             _worker() {
@@ -105,56 +108,32 @@
         },
 
         mounted() {
-            var data = {
-                id: this.$route.params.user_id
-            };
-            
-            var user = this.$store.getters['demo/user/list/worker/find'](data);
-
-            if (user) {
-                this._worker.fetch.work('data', user);
-                
-                this.userReset(user);
-            }
-            else {
-                this._worker
-                    .fetch
-                    .work('stage/update', {user: data})
-                    .request()
-                    .then(() => {
-                        this.reset();
-                    });
-            }
+            fetch.mounted(
+                this._worker.fetch,
+                this._worker.list,
+                {
+                    user: {
+                        id: this.$route.params.user_id
+                    }
+                }
+            )
+            .then((data) => {
+                this.reset(data);
+            });
         },
 
         methods: {
-            reset() {
-                this.userReset(this._payload.fetch.data);
+            reset(data) {
+                update.reset(this._worker.update, {user: data});
             },
 
-            userReset(user) {
-                this._worker
-                    .delete
-                    .work('stage/update', {
-                        user: user
-                    });
-
-                this._worker
-                    .update
-                    .work('stage/update', {
-                        user: user
-                    })
-                    .dispatch('reset', user);
+            update() {
+                update.request(this._worker.update);
             },
 
-            userUpdate() {
-                this._worker.update.request();
-            },
-
-            userDelete() {
-                this._worker
-                    .delete
-                    .request()
+            delete() {
+                deleat
+                    .request(this._worker.delete, {user: this._payload.fetch.data})
                     .then(() => {
                         this.$router.push({
                             name: 'user-list',
@@ -164,8 +143,12 @@
         },
 
         destroyed() {
-            this._worker.fetch.work('clear');
-            this._worker.update.work('clear');
+            fetch.destroyed(this._worker.fetch);
+            update.destroyed(this._worker.update);
+        },
+
+        components: {
+            ThisLoad
         }
     }
 </script>

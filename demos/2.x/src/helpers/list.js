@@ -17,11 +17,11 @@ export function mounted(worker, data) {
 };
 
 export function destroyed(worker) {
-    worker.work('clear');
+    return worker.work('clear');
 };
 
 export function filter(worker, data) {
-    worker
+    return worker
         .work('filter/update', data)
         .then(() => {
             var payload = worker.payload();
@@ -33,5 +33,5 @@ export function filter(worker, data) {
 };
 
 export function request(worker, data) {
-    worker.request(data);
+    return worker.request(data);
 };

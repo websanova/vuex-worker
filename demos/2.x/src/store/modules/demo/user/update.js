@@ -21,9 +21,9 @@ export default {
     actions: {
         reset(ctx, data) {
             ctx.dispatch('worker/form/update', {
-                email: data.email,
-                first_name: data.first_name,
-                last_name: data.last_name,
+                email: data.user.email,
+                first_name: data.user.first_name,
+                last_name: data.user.last_name,
             });
         }
     }
