@@ -13,7 +13,7 @@ If you like this component please consider sponsoring.
 
 ## Demo
 
-Check the [live demo](https://vue-worker.websanova.com) to see vue-worker in action.
+Check the [live demo](https://vuex-worker.websanova.com) to see vue-worker in action.
 
 
 ## Issues
@@ -34,10 +34,3 @@ For any issues or errors with the plugin or docs:
 MIT licensed
 
 Copyright (C) 2011-2020 Websanova https://websanova.com
-
-
-## TODO
-
-- create
-- destroy
-- avatar/upload
