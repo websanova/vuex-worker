@@ -118,6 +118,7 @@
 <script>
     import * as fetch  from '../../helpers/fetch.js';
     import * as update from '../../helpers/update.js';
+    import * as avatar from '../../helpers/avatar.js';
     import * as deleat from '../../helpers/delete.js';
 
     import ThisLoad    from '../../elements/Load.vue';
@@ -169,10 +170,7 @@
             },
 
             avatar() {
-                this._worker
-                    .avatar
-                    .work('stage/update', {user: this._payload.fetch.data})
-                    .dispatch('send');
+                avatar.request(this._worker.avatar, {user: this._payload.fetch.data});
             },
 
             delete() {
