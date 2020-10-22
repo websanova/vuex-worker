@@ -1,5 +1,5 @@
-import form  from 'LIB/store/utils/form';
-import stage from 'LIB/store/utils/stage';
+import form  from '../utils/form';
+import stage from '../utils/stage';
 
 export default {
     namespaced: true,

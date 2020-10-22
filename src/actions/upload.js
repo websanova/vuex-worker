@@ -1,5 +1,5 @@
 import Vue   from 'vue';
-import stage from 'LIB/store/utils/stage';
+import stage from '../utils/stage';
 
 export default {
     namespaced: true,
