@@ -1,73 +1,62 @@
 <template>
-    <div class="text-center">
-        <div
-            v-if="_payload.form.loading && !_payload.form.silent"
-        >
-            <span class="spinner">
-                Loading...
-            </span>
-        </div>
-
-        <div
-            v-else-if="_payload.form.status === 'success'"
-        >
+    <this-load
+        :status="_payload.fetch.form.status"
+        :error-msg="(_payload.fetch.form.errors['general'] || {}).msg"
+    >
+        <div class="text-center">
             <img
-                :src="_payload.data.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'"
+                :src="_payload.fetch.data.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'"
                 width="100"
             />
 
             <div
                 class="text-bold py-1"
             >
-                {{ _payload.data.first_name }} {{ _payload.data.last_name }}
+                {{ _payload.fetch.data.first_name }} {{ _payload.fetch.data.last_name }}
             </div>
         </div>
-
-        <div
-            v-else
-        >
-            There was an issue loading the user.
-
-            <div
-                class="text-danger py-2"
-            >
-                {{ _payload.form.errors['general'] }}
-            </div>
-        </div>
-    </div>
+    </this-load>
 </template>
 
 <script>
+    import * as fetch from '../../helpers/fetch.js';
+
+    import ThisLoad   from '../../elements/Load.vue';
+
     export default {
         computed: {
             _worker() {
-                return this.$store.worker('demo/user/fetch');
+                return {
+                    list: this.$store.worker('demo/user/list'),
+                    fetch: this.$store.worker('demo/user/fetch'),
+                };
             },
 
             _payload() {
-                return this._worker.payload();
+                return {
+                    fetch: this._worker.fetch.payload()
+                };
             }
         },
 
         mounted() {
-            var data = {
-                id: this.$route.params.user_id
-            };
-            
-            var user = this.$store.getters['demo/user/list/worker/find'](data);
-
-            if (user) {
-                this._worker.work('data', user);
-            }
-            else {
-                this._worker
-                    .work('stage/update', {user: data})
-                    .request();
-            }
+            fetch.mounted(
+                this._worker.fetch,
+                this._worker.list,
+                {
+                    user: {
+                        id: this.$route.params.user_id
+                    }
+                }
+            );
         },
 
         destroyed() {
-            this._worker.work('clear');
+            fetch.destroyed(this._worker.fetch);
+        },
+
+        components: {
+            ThisLoad,
         }
     }
 </script>
