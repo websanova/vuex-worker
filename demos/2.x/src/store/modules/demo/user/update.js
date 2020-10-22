@@ -14,7 +14,7 @@ export default {
 
         success(ctx, res) {
             this.worker('demo/user/list').work('sync', res.data.data);
-            this.worker('demo/user/fetch').work('data', res.data.data);
+            this.worker('demo/user/fetch').work('sync', res.data.data);
         }
     },
 

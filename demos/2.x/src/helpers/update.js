@@ -4,9 +4,9 @@ export function reset(worker, data) {
         .dispatch('reset', data);
 }
 
-export function request(worker) {
+export function request(worker, data) {
     return worker
-        .work('stage/update')
+        .work('stage/update', data)
         .request();
 };
 
