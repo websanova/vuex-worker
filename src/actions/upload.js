@@ -40,6 +40,7 @@ export default {
 
     actions: {
         on(ctx, data) {
+            ctx.commit('key', data.key || Math.random().toString());
             var success;
             
             data = data || {};
@@ -54,7 +55,6 @@ export default {
                 }
             };
 
-            ctx.commit('key', data.key || Math.random().toString());
 
             Vue.upload.on(ctx.state.key, data);
 
@@ -129,7 +129,8 @@ export default {
         form(state) {
             return {
                 errors: Vue.upload.file(state.key).error.msg ? {file: Vue.upload.file(state.key).error.msg} : {},
-                status: Vue.upload.file(state.key).sending ? 'loading' : Vue.upload.file(state.key).state
+                status: Vue.upload.file(state.key).sending ? 'loading' : Vue.upload.file(state.key).state,
+                loading: Vue.upload.file(state.key).sending
             };
         },
 

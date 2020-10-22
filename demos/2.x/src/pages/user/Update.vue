@@ -24,6 +24,29 @@
 
         <table>
             <tr>
+                <td
+                    class="text-center"
+                >
+                    <img
+                        :src="_payload.fetch.data.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'"
+                        width="50"
+                        class="mb-3"
+                    />
+                </td>
+                <td>
+                    <span
+                        v-if="_payload.avatar.form.loading"
+                        class="spinner"
+                    >Uploading...</span>
+
+                    <button
+                        v-else
+                        @click="avatar"
+                    >
+                        Update Avatar
+                    </button>
+                </td>
+            </tr><tr>
                 <td>
                     First Name:
                 </td>
@@ -107,6 +130,7 @@
                     fetch: this.$store.worker('demo/user/fetch'),
                     update: this.$store.worker('demo/user/update'),
                     delete: this.$store.worker('demo/user/delete'),
+                    avatar: this.$store.worker('demo/user/avatar'),
                 };
             },
 
@@ -115,6 +139,7 @@
                     list: this._worker.list.payload(),
                     fetch: this._worker.fetch.payload(),
                     update: this._worker.update.payload(),
+                    avatar: this._worker.avatar.payload(),
                 };
             }
         },
@@ -141,6 +166,13 @@
 
             update() {
                 update.request(this._worker.update);
+            },
+
+            avatar() {
+                this._worker
+                    .avatar
+                    .work('stage/update', {user: this._payload.fetch.data})
+                    .dispatch('send');
             },
 
             delete() {

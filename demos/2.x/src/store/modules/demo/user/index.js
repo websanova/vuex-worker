@@ -1,8 +1,9 @@
 import list     from './list';
 import fetch    from './fetch';
+import create   from './create';
+import avatar   from './avatar';
 import update   from './update';
 import deleat   from './delete';
-import create   from './create';
 import undelete from './undelete';
 
 export default {
@@ -12,6 +13,7 @@ export default {
         list,
         fetch,
         create,
+        avatar,
         update,
         delete: deleat,
         undelete,

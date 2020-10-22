@@ -12,7 +12,7 @@ export default {
             return 'demos/users/' + payload.stage.data.user.id +  '/update';
         },
 
-        success(ctx, res) {
+        onSuccess(ctx, res) {
             this.worker('demo/user/list').work('sync', res.data.data);
             this.worker('demo/user/fetch').work('sync', res.data.data);
         }
