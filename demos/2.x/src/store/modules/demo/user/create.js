@@ -15,8 +15,6 @@ export default {
             var role   = worker.payload().filter.fields.role;
             var state  = worker.payload().filter.fields.state;
             
-            console.log(res);
-
             if (
                 (role === '' || res.data.data.role === role) &&
                 (state === '' || state === 'active')
