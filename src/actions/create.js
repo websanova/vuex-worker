@@ -16,6 +16,11 @@ export default {
             data.method = data.method || 'POST';
 
             return ctx.dispatch('form/send', data);
+        },
+
+        clear(ctx) {
+            ctx.dispatch('form/clear');
+            ctx.dispatch('stage/clear');
         }
     },
 

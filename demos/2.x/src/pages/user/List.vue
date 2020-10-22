@@ -1,12 +1,14 @@
 <template>
     <div>
         <this-list
+            :show-create-button="true"
             :items="_payload.list.data.items"
             :total="_payload.list.data.total"
             :per-page="_payload.list.data.per_page"
             :current-page="_payload.list.data.current_page"
             :status="_payload.list.form.status"
             :filters="_payload.list.filter.data"
+            @create="$router.push({name: 'user-create'})"
             @refresh="request"
             @silent="request({silent: true})"
             @filter="filter"

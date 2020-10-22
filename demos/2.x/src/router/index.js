@@ -17,7 +17,11 @@ Vue.router = new VueRouter({
             name: 'user-list'
         }
     }, {
-        path: '/list',
+        path: '/users/create',
+        name: 'user-create',
+        component: loadView('user/Create'),
+    }, {
+        path: '/users/list',
         name: 'user-list',
         component: loadView('user/List'),
     }, {

@@ -3,6 +3,16 @@
         <div class="media">
             <div>
                 <ul class="spacer">
+                    <li
+                        v-if="showCreateButton"
+                    >
+                        <button
+                            @click="$emit('create')"
+                        >
+                            Create
+                        </button>
+                    </li>
+
                     <li>
                         <button
                             @click="$emit('refresh')"
@@ -107,6 +117,7 @@
             currentPage: Number,
             status: String,
             filters: Object,
+            showCreateButton: Boolean,
         },
 
         computed: {

@@ -226,6 +226,8 @@ export default {
 
                             resolve(res);
                         }, (res) => {
+                            res = res.response || res;
+
                             if (data.error) {
                                 data.error(res);
                             }

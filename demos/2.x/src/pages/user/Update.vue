@@ -32,6 +32,12 @@
                         :value="_payload.update.form.fields.first_name"
                         @change="_worker.update.work('form/update', {first_name: $event.target.value})"
                     />
+                    <div
+                        v-if="_payload.update.form.errors.first_name"
+                        class="text-danger text-sm"
+                    >
+                        {{ _payload.update.form.errors.first_name }}
+                    </div>
                 </td>
             </tr><tr>
                 <td>
@@ -42,6 +48,12 @@
                         :value="_payload.update.form.fields.last_name"
                         @change="_worker.update.work('form/update', {last_name: $event.target.value})"
                     />
+                    <div
+                        v-if="_payload.update.form.errors.first_name"
+                        class="text-danger text-sm"
+                    >
+                        {{ _payload.update.form.errors.first_name }}
+                    </div>
                 </td>
             </tr><tr>
                 <td></td>

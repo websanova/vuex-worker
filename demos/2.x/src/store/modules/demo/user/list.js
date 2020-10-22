@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import list from '@websanova/vuex-worker/src/actions/list';
 
 export default {
