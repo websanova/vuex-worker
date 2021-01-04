@@ -39,22 +39,23 @@
 
     export default {
         computed: {
-            _worker() {
-                return {
-                    list: this.$store.worker('demo/user/list'),
-                    undelete: this.$store.worker('demo/user/undelete'),
-                };
-            },
-
             _payload() {
                 return {
-                    list: this._worker.list.payload(),
+                    list: {
+                        data: this.$store.getters['demo/user/list/worker/data'],
+                        form: this.$store.getters['demo/user/list/worker/form'],
+                        filter: this.$store.getters['demo/user/list/worker/filter']
+                    }
                 };
             }
         },
 
+        beforeCreate() {
+            list.init(this, 'demo/user/list');
+        },
+
         mounted() {
-            list.mounted(this._worker.list, {
+            list.mounted(this, 'demo/user/list', {
                 page: this.$route.query.page,
                 role: this.$route.query.role,
                 state: this.$route.query.state,
@@ -72,15 +73,15 @@
 
         methods: {
             filter(data) {
-                list.filter(this._worker.list, data);
+                list.filter(this, 'demo/user/list', data);
             },
 
             request(data) {
-                list.request(this._worker.list, data);
+                list.request(this, 'demo/user/list', data);
             },
 
             undelete(data) {
-                undelete.request(this._worker.undelete, data);
+                undelete.request(this, 'demo/user/undelete', data);
             }
         },
 

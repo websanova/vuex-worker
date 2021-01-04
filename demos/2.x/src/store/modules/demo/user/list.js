@@ -7,34 +7,35 @@ export default {
         worker: list
     },
 
-    hooks: {
-        created(ctx) {
-            this.worker('demo/user/list')
-                .work('filter/reset', {
-                    page: 1,
-                    query: '',
-                    role: {
-                        default: '',
-                        options: [
-                            {value: '', label: 'All Roles'},
-                            'super',
-                            'editor',
-                            'user'
-                        ],
-                    },
-                    state: {
-                        default: '',
-                        options: [
-                            {value: '', label: 'All States'},
-                            'active',
-                            'deleted'
-                        ]
-                    }
+    actions: {
+        init(ctx) {
+            ctx.dispatch('worker/filter/reset', {
+                page: 1,
+                query: '',
+                role: {
+                    default: '',
+                    options: [
+                        {value: '', label: 'All Roles'},
+                        'super',
+                        'editor',
+                        'user'
+                    ],
+                },
+                state: {
+                    default: '',
+                    options: [
+                        {value: '', label: 'All States'},
+                        'active',
+                        'deleted'
+                    ]
+                }
             });
-        }
-    },
+        },
 
-    request: {
-        url: 'demos/users/list'
+        request(ctx, data) {
+            return ctx.dispatch('worker/send', Object.assign(data, {
+                url: 'demos/users/list'
+            }));
+        }
     }
 }

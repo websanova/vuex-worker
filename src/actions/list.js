@@ -88,7 +88,7 @@ export default {
                 .catch(() => {
                     // TODO: Nothing
                 });
-            })
+            });
         },
 
         action (ctx, data) {
