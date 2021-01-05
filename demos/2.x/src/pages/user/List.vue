@@ -41,11 +41,7 @@
         computed: {
             _payload() {
                 return {
-                    list: {
-                        data: this.$store.getters['demo/user/list/worker/data'],
-                        form: this.$store.getters['demo/user/list/worker/form'],
-                        filter: this.$store.getters['demo/user/list/worker/filter']
-                    }
+                    list: list.payload(this, 'demo/user/list')
                 };
             }
         },
@@ -68,7 +64,7 @@
             //       upon return to the page from another page.
             //       Otherwise the data will stay in our store.
 
-            // list.clear(this._worker.list);
+            // list.clear(this, 'demo/user/list');
         },
 
         methods: {

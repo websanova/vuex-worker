@@ -174,13 +174,12 @@
             },
 
             delete() {
-                deleat
-                    .request(this._worker.delete, {user: this._payload.fetch.data})
-                    .then(() => {
-                        this.$router.push({
-                            name: 'user-list',
-                        });
-                    });
+                deleat.stageAndRequest(
+                    this,
+                    'demo/user/delete',
+                    {user: this._payload.fetch.data},
+                    {push: {name: 'user-list'}}
+                );
             }
         },
 

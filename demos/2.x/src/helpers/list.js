@@ -1,30 +1,35 @@
-import Vue from 'vue';
+import {clear, reset, request} from './common.js';
 
-export function reset(ctx, worker) {
-    ctx.$store.dispatch(worker + '/reset');
-}
+const payload = function(ctx, worker) {
+    return {
+        data: ctx.$store.getters[worker + '/worker/data'],
+        form: ctx.$store.getters[worker + '/worker/form'],
+        filter: ctx.$store.getters[worker + '/worker/filter']
+    };
+};
 
-export function init(ctx, worker, data) {
+const init = function(ctx, worker, data) {
     var form   = ctx.$store.getters[worker + '/worker/form'],
         filter = ctx.$store.getters[worker + '/worker/filter'],
         query  = filter.query;
 
     if (form.status === null) {
         ctx.$store.dispatch(worker + '/worker/filter/update', data || {});
-        ctx.$store.dispatch(worker + '/request', {});
+        
+        return ctx.$store.dispatch(worker + '/request', {});
     }
     else if (Object.keys(query).length) {
-        Vue.router.replace({
-            query: query
+        return new Promise(function(resolve) {
+            ctx.$router.replace({
+                query: query
+            });
+
+            resolve();
         });
     }
 };
 
-export function clear(ctx, worker) {
-    ctx.$store.dispatch(worker + '/worker/form/clear');
-};
-
-export function filter(ctx, worker, data) {
+const filter = function(ctx, worker, data) {
     var filter;
 
     ctx.$store.dispatch(worker + '/worker/filter/update', data || {});
@@ -36,6 +41,11 @@ export function filter(ctx, worker, data) {
     }
 };
 
-export function request(ctx, worker, data) {
-    ctx.$store.dispatch(worker + '/request', data || {});
+export {
+    init,
+    clear,
+    reset,
+    filter,
+    request,
+    payload,
 };

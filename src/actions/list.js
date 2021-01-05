@@ -91,7 +91,11 @@ export default {
             });
         },
 
-        action (ctx, data) {
+        /**
+         * This is a redundancy method meant o clean up
+         * action calls and not mean to be called directly.
+         */
+        action(ctx, data) {
             var index;
 
             if (

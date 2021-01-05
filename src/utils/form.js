@@ -136,23 +136,23 @@ export default {
             }
         },
 
-        fire(ctx, data) {
-            data = data || {};
+        // fire(ctx, data) {
+        //     data = data || {};
 
-            return new Promise((resolve, reject) => {
-                Vue.http({
-                        method: data.method || 'get',
-                        url: data.url,
-                        params: data.body || data.params,
-                        body: Object.assign({}, data.body, ctx.state.fields)
-                    })
-                    .then((res) => {
-                        resolve(res);
-                    }, (res) => {
-                        reject(res);
-                    });
-            });
-        },
+        //     return new Promise((resolve, reject) => {
+        //         Vue.http({
+        //                 method: data.method || 'get',
+        //                 url: data.url,
+        //                 params: data.body || data.params,
+        //                 body: Object.assign({}, data.body, ctx.state.fields)
+        //             })
+        //             .then((res) => {
+        //                 resolve(res);
+        //             }, (res) => {
+        //                 reject(res);
+        //             });
+        //     });
+        // },
 
         send(ctx, data) {
             var body,

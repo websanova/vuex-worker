@@ -1,9 +1,8 @@
-export function request(worker, data) {
-    return worker
-        .work('stage/update', data)
-        .request();
-};
+import {clear, stage, request, stageAndRequest} from './common.js';
 
-export function destroyed(worker) {
-    return worker.work('clear');
+export {
+    clear,
+    stage,
+    request,
+    stageAndRequest,
 };
