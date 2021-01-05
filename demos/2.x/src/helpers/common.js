@@ -16,7 +16,7 @@ const request = function(ctx, worker, data) {
     return new Promise(function (resolve, reject) {
         ctx
         .$store
-        .dispatch(worker + '/request', data || {})
+        .dispatch(worker + '/request', data)
         .then(function (res) {
             resolve(res);
 
