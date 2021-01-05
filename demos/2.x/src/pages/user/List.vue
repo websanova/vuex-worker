@@ -51,11 +51,11 @@
         },
 
         beforeCreate() {
-            list.init(this, 'demo/user/list');
+            list.reset(this, 'demo/user/list');
         },
 
         mounted() {
-            list.mounted(this, 'demo/user/list', {
+            list.init(this, 'demo/user/list', {
                 page: this.$route.query.page,
                 role: this.$route.query.role,
                 state: this.$route.query.state,
@@ -68,7 +68,7 @@
             //       upon return to the page from another page.
             //       Otherwise the data will stay in our store.
 
-            // list.destroyed(this._worker.list);
+            // list.clear(this._worker.list);
         },
 
         methods: {

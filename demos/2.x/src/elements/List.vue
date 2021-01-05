@@ -92,7 +92,7 @@
         </div>
 
         <div
-            v-if="_pages > 1"
+            v-if="!_isLoading && _pages > 1"
         >
             <hr />
 

@@ -60,13 +60,13 @@ export default {
                 success,
                 filters = ctx.state.filter.data;
 
-            data = data || {};
-            body = data.body || {};
+            data      = data || {};
+            data.body = data.body || {};
 
             if (filters) {
                 for (i in filters) {
                     if (filters[i].value !== undefined) {
-                        body[i] = filters[i].value;
+                        data.body[i] = filters[i].value;
                     }
                 }
             }

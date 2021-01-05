@@ -8,7 +8,7 @@ export default {
     },
 
     actions: {
-        init(ctx) {
+        reset(ctx) {
             ctx.dispatch('worker/filter/reset', {
                 page: 1,
                 query: '',

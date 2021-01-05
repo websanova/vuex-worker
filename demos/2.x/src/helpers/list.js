@@ -1,10 +1,10 @@
 import Vue from 'vue';
 
-export function init(ctx, worker) {
-    ctx.$store.dispatch(worker + '/init');
+export function reset(ctx, worker) {
+    ctx.$store.dispatch(worker + '/reset');
 }
 
-export function mounted(ctx, worker, data) {
+export function init(ctx, worker, data) {
     var form   = ctx.$store.getters[worker + '/worker/form'],
         filter = ctx.$store.getters[worker + '/worker/filter'],
         query  = filter.query;
@@ -20,20 +20,20 @@ export function mounted(ctx, worker, data) {
     }
 };
 
-export function destroyed(ctx, worker) {
-    // return worker.work('clear');
+export function clear(ctx, worker) {
+    ctx.$store.dispatch(worker + '/worker/form/clear');
 };
 
 export function filter(ctx, worker, data) {
-    // return worker
-    //     .work('filter/update', data)
-    //     .then(() => {
-    //         var payload = worker.payload();
+    var filter;
 
-    //         if (payload.filter.isChange) {
-    //             worker.request();
-    //         }
-    //     });
+    ctx.$store.dispatch(worker + '/worker/filter/update', data || {});
+    
+    filter = ctx.$store.getters[worker + '/worker/filter'];
+
+    if (filter.isChange) {
+        ctx.$store.dispatch(worker + '/request', {});
+    }
 };
 
 export function request(ctx, worker, data) {
