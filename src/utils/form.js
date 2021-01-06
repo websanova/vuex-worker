@@ -179,7 +179,7 @@ export default {
                     clearTimeout(ctx.state.timer);
                     
                     ctx.commit('timer', null);
-                    
+
                     resolve();
                 }
 
@@ -235,6 +235,9 @@ export default {
                             ctx.dispatch('error', res);
 
                             reject(res);
+                        })
+                        .finally(function () {
+                            ctx.commit('timer', null);
                         });
                 }, 50);
 

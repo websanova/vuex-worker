@@ -34,7 +34,7 @@
                     />
                 </td>
                 <td>
-                    <span
+                    <!-- <span
                         v-if="_payload.avatar.form.loading"
                         class="spinner"
                     >Uploading...</span>
@@ -44,39 +44,39 @@
                         @click="avatar"
                     >
                         Update Avatar
-                    </button>
+                    </button> -->
                 </td>
             </tr><tr>
                 <td>
                     First Name:
                 </td>
                 <td>
-                    <input
+                    <!-- <input
                         :value="_payload.update.form.fields.first_name"
                         @change="_worker.update.work('form/update', {first_name: $event.target.value})"
-                    />
-                    <div
+                    /> -->
+                    <!-- <div
                         v-if="_payload.update.form.errors.first_name"
                         class="text-danger text-sm"
                     >
                         {{ _payload.update.form.errors.first_name }}
-                    </div>
+                    </div> -->
                 </td>
             </tr><tr>
                 <td>
                     Last Name:
                 </td>
                 <td>
-                    <input
+                    <!-- <input
                         :value="_payload.update.form.fields.last_name"
                         @change="_worker.update.work('form/update', {last_name: $event.target.value})"
-                    />
-                    <div
+                    /> -->
+                    <!-- <div
                         v-if="_payload.update.form.errors.first_name"
                         class="text-danger text-sm"
                     >
                         {{ _payload.update.form.errors.first_name }}
-                    </div>
+                    </div> -->
                 </td>
             </tr><tr>
                 <td></td>
@@ -86,27 +86,27 @@
                         class="spacer"
                     >
                         <li>
-                            <button
+                            <!-- <button
                                 @click="update"
                                 :disabled="_payload.update.form.loading"
                             >
                                 Update
-                            </button>
+                            </button> -->
                         </li>
                         <li>
-                            <button
+                            <!-- <button
                                 @click="reset(_payload.fetch.data)"
                                 :disabled="_payload.update.form.loading"
                             >
                                 Reset
-                            </button>
+                            </button> -->
                         </li>
 
                         <li>
-                            <span
+                            <!-- <span
                                 v-show="_payload.update.form.loading"
                                 class="spinner"
-                            />
+                            /> -->
                         </li>
                     </ul>
                 </td>
@@ -116,77 +116,81 @@
 </template>
 
 <script>
-    import * as fetch  from '../../helpers/fetch.js';
-    import * as update from '../../helpers/update.js';
-    import * as avatar from '../../helpers/avatar.js';
-    import * as deleat from '../../helpers/delete.js';
-
-    import ThisLoad    from '../../elements/Load.vue';
+    import * as store from '../../helpers/store.js';
+    import ThisLoad   from '../../elements/Load.vue';
 
     export default {
         computed: {
             _worker() {
                 return {
-                    list: this.$store.worker('demo/user/list'),
-                    fetch: this.$store.worker('demo/user/fetch'),
-                    update: this.$store.worker('demo/user/update'),
-                    delete: this.$store.worker('demo/user/delete'),
-                    avatar: this.$store.worker('demo/user/avatar'),
+                    // list: this.$store.worker('demo/user/list'),
+                    // fetch: this.$store.worker('demo/user/fetch'),
+                    // update: this.$store.worker('demo/user/update'),
+                    // delete: this.$store.worker('demo/user/delete'),
+                    // avatar: this.$store.worker('demo/user/avatar'),
                 };
             },
 
             _payload() {
                 return {
-                    list: this._worker.list.payload(),
-                    fetch: this._worker.fetch.payload(),
-                    update: this._worker.update.payload(),
-                    avatar: this._worker.avatar.payload(),
+                    // list: this._worker.list.payload(),
+                    fetch: store.payload(this, 'demo/user/fetch'),
+                    // update: this._worker.update.payload(),
+                    // avatar: this._worker.avatar.payload(),
                 };
             }
         },
 
         mounted() {
-            fetch.mounted(
-                this._worker.fetch,
-                this._worker.list,
-                {
-                    user: {
-                        id: this.$route.params.user_id
-                    }
-                }
-            )
-            .then((data) => {
-                this.reset(data);
-            });
+            store.fetch(
+                this,
+                'demo/user/fetch',
+                {user: {id: this.$route.params.user_id}},
+                null,
+                {find: 'user', in: 'demo/user/list'}
+            );
+
+            // fetch.mounted(
+            //     this._worker.fetch,
+            //     this._worker.list,
+            //     {
+            //         user: {
+            //             id: this.$route.params.user_id
+            //         }
+            //     }
+            // )
+            // .then((data) => {
+            //     this.reset(data);
+            // });
         },
 
         methods: {
-            reset(data) {
-                update.reset(this._worker.update, {user: data});
-            },
+            // reset(data) {
+            //     update.reset(this._worker.update, {user: data});
+            // },
 
-            update() {
-                update.request(this._worker.update);
-            },
+            // update() {
+            //     update.request(this._worker.update);
+            // },
 
-            avatar() {
-                avatar.request(this._worker.avatar, {user: this._payload.fetch.data});
-            },
+            // avatar() {
+            //     avatar.request(this._worker.avatar, {user: this._payload.fetch.data});
+            // },
 
             delete() {
-                deleat.stageAndRequest(
+                store.stageAndRequest(
                     this,
                     'demo/user/delete',
                     {user: this._payload.fetch.data},
-                    {push: {name: 'user-list'}}
+                    {sync: 'demo/user/list', push: {name: 'user-list'}}
                 );
             }
         },
 
-        destroyed() {
-            fetch.destroyed(this._worker.fetch);
-            update.destroyed(this._worker.update);
-        },
+        // destroyed() {
+        //     fetch.destroyed(this._worker.fetch);
+        //     update.destroyed(this._worker.update);
+        // },
 
         components: {
             ThisLoad

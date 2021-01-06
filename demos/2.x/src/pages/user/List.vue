@@ -31,27 +31,25 @@
 </template>
 
 <script>
-    import * as list     from '../../helpers/list.js';
-    import * as undelete from '../../helpers/undelete.js';
-    
-    import ThisList      from '../../elements/List.vue';
-    import ThisUserItem  from '../../elements/UserItem.vue';
+    import * as store   from '../../helpers/store.js';
+    import ThisList     from '../../elements/List.vue';
+    import ThisUserItem from '../../elements/UserItem.vue';
 
     export default {
         computed: {
             _payload() {
                 return {
-                    list: list.payload(this, 'demo/user/list')
+                    list: store.payload(this, 'demo/user/list')
                 };
             }
         },
 
         beforeCreate() {
-            list.reset(this, 'demo/user/list');
+            store.reset(this, 'demo/user/list');
         },
 
         mounted() {
-            list.init(this, 'demo/user/list', {
+            store.initList(this, 'demo/user/list', {
                 page: this.$route.query.page,
                 role: this.$route.query.role,
                 state: this.$route.query.state,
@@ -64,20 +62,25 @@
             //       upon return to the page from another page.
             //       Otherwise the data will stay in our store.
 
-            // list.clear(this, 'demo/user/list');
+            // store.clear(this, 'demo/user/list');
         },
 
         methods: {
             filter(data) {
-                list.filter(this, 'demo/user/list', data);
+                store.filterAndRequest(this, 'demo/user/list', data);
             },
 
             request(data) {
-                list.request(this, 'demo/user/list', data);
+                store.request(this, 'demo/user/list', data);
             },
 
             undelete(data) {
-                undelete.request(this, 'demo/user/undelete', data);
+                store.stageAndRequest(
+                    this,
+                    'demo/user/undelete',
+                    data,
+                    {sync: 'demo/user/list'}
+                );
             }
         },
 

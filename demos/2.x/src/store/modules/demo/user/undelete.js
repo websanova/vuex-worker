@@ -7,17 +7,13 @@ export default {
         worker: update
     },
 
-    request: {
-        url(ctx, payload) {
-            return 'demos/users/' + payload.stage.data.user.id +  '/undelete';
-        },
+    actions: {
+        request(ctx, data) {
+            var stage = ctx.getters['worker/stage'];
 
-        success(ctx, res) {
-            var worker = this.worker('demo/user/list');
-            var state  = worker.payload().filter.fields.state;
-            var action = state === '' ? 'sync' : 'remove';
-
-            this.worker('demo/user/list').work(action, res.data.data);
+            return ctx.dispatch('worker/send', Object.assign(data, {
+                url: 'demos/users/' + stage.data.user.id +  '/undelete'
+            }));
         }
     }
 }
