@@ -11,10 +11,17 @@ export default {
         request(ctx, data) {
             var stage = ctx.getters['worker/stage'];
 
-            return ctx.dispatch('worker/send', Object.assign(data, {
-                url: 'demos/users/' + stage.data.user.id +  '/undelete',
-                sync: 'demo/user/list'
-            }));
+            return new Promise((resolve, reject) => {
+                ctx.dispatch('worker/send', Object.assign(data, {
+                    url: 'demos/users/' + stage.data.user.id +  '/undelete'
+                }))
+                .then((res) => {
+                    this.dispatch('demo/user/list/worker/sync', res.data.data);
+                    this.dispatch('demo/user/fetch/worker/sync', res.data.data);
+
+                    resolve(res);
+                }, reject);
+            });
         }
     }
 }

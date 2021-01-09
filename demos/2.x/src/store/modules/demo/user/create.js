@@ -10,9 +10,10 @@ export default {
     actions: {
         request(ctx, data) {
             return new Promise((resolve, reject) => {
-                ctx.dispatch('worker/send', Object.assign(data, {
-                    url: 'demos/users/create'
-                }))
+                ctx.dispatch('worker/send', Object.assign({
+                    url: 'demos/users/create',
+                    clear: true
+                }, data))
                 .then((res) => {
                     var filter = this.getters['demo/user/list/worker/filter/fields'];
 

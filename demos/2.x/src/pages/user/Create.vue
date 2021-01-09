@@ -106,10 +106,11 @@
             },
 
             create() {
-                store.request(
-                    this, 'demo/user/create',
-                    {clear: true, push: {name: 'user-list'}}
-                );
+                store
+                .request(this, 'demo/user/create')
+                .then(() => {
+                    this.$router.push({name: 'user-list'});
+                });
             }
         }
     }

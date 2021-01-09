@@ -131,7 +131,7 @@
                 this,
                 'demo/user/fetch',
                 {user: {id: this.$route.params.user_id}},
-                {find: {model: 'user', in: 'demo/user/list'}}
+                {find: {in: 'demo/user/list'}}
             )
             .then(() => {
                 this.reset();
@@ -160,12 +160,15 @@
             // },
 
             delete() {
-                store.stageAndRequest(
+                store
+                .stageAndRequest(
                     this,
                     'demo/user/delete',
                     {user: this._payload.user.fetch.data},
-                    {push: {name: 'user-list'}}
-                );
+                )
+                .then(() => {
+                    this.$router.push({name: 'user-list'});
+                });
             }
         },
 

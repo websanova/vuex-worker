@@ -25,30 +25,9 @@ const reset = function(ctx, worker, data) {
 }
 
 const request = function(ctx, worker, data) {
-    var i, ii;
-    
-    data = data || {};
-
-    return new Promise(function (resolve, reject) {
-        ctx
+    return ctx
         .$store
-        .dispatch(worker + '/request', data)
-        .then(function (res) {
-            resolve(res);
-
-            if (data.push) {
-                ctx.$router.push(data.push);
-            }
-
-            if (data.sync) {
-                data.sync = data.sync.constructor !== Array ? [data.sync] : data.sync;
-
-                for (i = 0, ii = data.sync.length; i < ii; i++) {
-                    ctx.$store.dispatch(data.sync[i] + '/worker/sync', res.data.data);
-                }
-            }
-        }, reject);
-    });
+        .dispatch(worker + '/request', data || {});
 };
 
 const stageAndRequest = function(ctx, worker, dataStage, dataRequest) {
@@ -125,6 +104,8 @@ const fetch = function(ctx, worker, dataStage, dataRequest) {
     dataRequest = dataRequest || {};
 
     if (dataRequest.find) {
+        dataRequest.find.model = find.model || Object.keys(dataStage)[0];
+
         item = ctx.$store.getters[dataRequest.find.in + '/worker/find'](dataStage[dataRequest.find.model]);
     }
 

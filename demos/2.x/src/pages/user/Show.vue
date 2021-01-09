@@ -34,7 +34,7 @@
                 this,
                 'demo/user/fetch',
                 {user: {id: this.$route.params.user_id}},
-                {find: {model: 'user', in: 'demo/user/list'}}
+                {find: {in: 'demo/user/list'}}
             );
         },
 
