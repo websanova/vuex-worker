@@ -1,11 +1,11 @@
 <template>
     <this-load
-        :status="_payload.fetch.form.status"
+        :status="_payload.user.fetch.form.status"
     >
         <div class="media m-0">
             <div class="media-middle">
                 <span class="text-bold">
-                    {{ _payload.fetch.data.first_name }} {{ _payload.fetch.data.last_name }} 
+                    {{ _payload.user.fetch.data.first_name }} {{ _payload.user.fetch.data.last_name }} 
                 </span>
 
                 &#8203;
@@ -28,7 +28,7 @@
                     class="text-center"
                 >
                     <img
-                        :src="_payload.fetch.data.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'"
+                        :src="_payload.user.fetch.data.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'"
                         width="50"
                         class="mb-3"
                     />
@@ -51,32 +51,32 @@
                     First Name:
                 </td>
                 <td>
-                    <!-- <input
-                        :value="_payload.update.form.fields.first_name"
-                        @change="_worker.update.work('form/update', {first_name: $event.target.value})"
-                    /> -->
-                    <!-- <div
-                        v-if="_payload.update.form.errors.first_name"
+                    <input
+                        :value="_payload.user.update.form.fields.first_name"
+                        @input="input({first_name: $event.target.value})"
+                    />
+                    <div
+                        v-if="_payload.user.update.form.errors.first_name"
                         class="text-danger text-sm"
                     >
-                        {{ _payload.update.form.errors.first_name }}
-                    </div> -->
+                        {{ _payload.user.update.form.errors.first_name }}
+                    </div>
                 </td>
             </tr><tr>
                 <td>
                     Last Name:
                 </td>
                 <td>
-                    <!-- <input
-                        :value="_payload.update.form.fields.last_name"
-                        @change="_worker.update.work('form/update', {last_name: $event.target.value})"
-                    /> -->
-                    <!-- <div
-                        v-if="_payload.update.form.errors.first_name"
+                    <input
+                        :value="_payload.user.update.form.fields.last_name"
+                        @input="input({last_name: $event.target.value})"
+                    />
+                    <div
+                        v-if="_payload.user.update.form.errors.first_name"
                         class="text-danger text-sm"
                     >
-                        {{ _payload.update.form.errors.first_name }}
-                    </div> -->
+                        {{ _payload.user.update.form.errors.first_name }}
+                    </div>
                 </td>
             </tr><tr>
                 <td></td>
@@ -86,27 +86,27 @@
                         class="spacer"
                     >
                         <li>
-                            <!-- <button
+                            <button
                                 @click="update"
-                                :disabled="_payload.update.form.loading"
+                                :disabled="_payload.user.update.form.loading"
                             >
                                 Update
-                            </button> -->
+                            </button>
                         </li>
                         <li>
-                            <!-- <button
-                                @click="reset(_payload.fetch.data)"
-                                :disabled="_payload.update.form.loading"
+                            <button
+                                @click="reset"
+                                :disabled="_payload.user.update.form.loading"
                             >
                                 Reset
-                            </button> -->
+                            </button>
                         </li>
 
                         <li>
-                            <!-- <span
-                                v-show="_payload.update.form.loading"
+                            <span
+                                v-show="_payload.user.update.form.loading"
                                 class="spinner"
-                            /> -->
+                            />
                         </li>
                     </ul>
                 </td>
@@ -121,23 +121,8 @@
 
     export default {
         computed: {
-            _worker() {
-                return {
-                    // list: this.$store.worker('demo/user/list'),
-                    // fetch: this.$store.worker('demo/user/fetch'),
-                    // update: this.$store.worker('demo/user/update'),
-                    // delete: this.$store.worker('demo/user/delete'),
-                    // avatar: this.$store.worker('demo/user/avatar'),
-                };
-            },
-
             _payload() {
-                return {
-                    // list: this._worker.list.payload(),
-                    fetch: store.payload(this, 'demo/user/fetch'),
-                    // update: this._worker.update.payload(),
-                    // avatar: this._worker.avatar.payload(),
-                };
+                return store.payload(this, ['demo/user/fetch', 'demo/user/update']);
             }
         },
 
@@ -146,32 +131,30 @@
                 this,
                 'demo/user/fetch',
                 {user: {id: this.$route.params.user_id}},
-                null,
-                {find: 'user', in: 'demo/user/list'}
-            );
-
-            // fetch.mounted(
-            //     this._worker.fetch,
-            //     this._worker.list,
-            //     {
-            //         user: {
-            //             id: this.$route.params.user_id
-            //         }
-            //     }
-            // )
-            // .then((data) => {
-            //     this.reset(data);
-            // });
+                {find: {model: 'user', in: 'demo/user/list'}}
+            )
+            .then(() => {
+                this.reset();
+            })
         },
 
         methods: {
-            // reset(data) {
-            //     update.reset(this._worker.update, {user: data});
-            // },
+            reset(data) {
+                store.reset(this, 'demo/user/update', {user: this._payload.user.fetch.data});
+            },
 
-            // update() {
-            //     update.request(this._worker.update);
-            // },
+            input(data) {
+                store.form(this, 'demo/user/update', data);
+            },
+
+            update() {
+                store.stageAndRequest(
+                    this,
+                    'demo/user/update',
+                    {user: this._payload.user.fetch.data},
+                    {sync: ['demo/user/fetch', 'demo/user/list']}
+                );
+            },
 
             // avatar() {
             //     avatar.request(this._worker.avatar, {user: this._payload.fetch.data});
@@ -181,16 +164,15 @@
                 store.stageAndRequest(
                     this,
                     'demo/user/delete',
-                    {user: this._payload.fetch.data},
+                    {user: this._payload.user.fetch.data},
                     {sync: 'demo/user/list', push: {name: 'user-list'}}
                 );
             }
         },
 
-        // destroyed() {
-        //     fetch.destroyed(this._worker.fetch);
-        //     update.destroyed(this._worker.update);
-        // },
+        destroyed() {
+            store.clear(this, ['demo/user/fetch', 'demo/user/update']);
+        },
 
         components: {
             ThisLoad

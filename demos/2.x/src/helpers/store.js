@@ -1,9 +1,15 @@
 const clear = function(ctx, worker) {
-    ctx.$store.dispatch(worker + '/worker/clear');
+    var i, ii;
+
+    worker = worker.constructor !== Array ? [worker] : worker;
+
+    for (i = 0, ii = worker.length; i < ii; i++) {
+        ctx.$store.dispatch(worker[i] + '/worker/clear');
+    }
 };
 
-const reset = function(ctx, worker, data) {
-    ctx.$store.dispatch(worker + '/reset', data || {});
+const form = function(ctx, worker, data) {
+    ctx.$store.dispatch(worker + '/worker/form/update', data || {});
 }
 
 const stage = function(ctx, worker, data) {
@@ -14,7 +20,13 @@ const filter = function(ctx, worker, data) {
     ctx.$store.dispatch(worker + '/worker/filter/update', data || {});
 }
 
+const reset = function(ctx, worker, data) {
+    ctx.$store.dispatch(worker + '/reset', data || {});
+}
+
 const request = function(ctx, worker, data) {
+    var i, ii;
+    
     data = data || {};
 
     return new Promise(function (resolve, reject) {
@@ -29,7 +41,11 @@ const request = function(ctx, worker, data) {
             }
 
             if (data.sync) {
-                ctx.$store.dispatch(data.sync + '/worker/sync', res.data.data);
+                data.sync = data.sync.constructor !== Array ? [data.sync] : data.sync;
+
+                for (i = 0, ii = data.sync.length; i < ii; i++) {
+                    ctx.$store.dispatch(data.sync[i] + '/worker/sync', res.data.data);
+                }
             }
 
         }, reject);
@@ -51,11 +67,36 @@ const filterAndRequest = function(ctx, worker, dataFilter, dataRequest) {
 };
 
 const payload = function(ctx, worker) {
-    return {
-        data: ctx.$store.getters[worker + '/worker/data'],
-        form: ctx.$store.getters[worker + '/worker/form'],
-        filter: ctx.$store.getters[worker + '/worker/filter']
-    };
+    var i, ii,
+        j, jj,
+        split,
+        object,
+        data = {};
+
+    worker = worker.constructor !== Array ? [worker] : worker;
+
+    for (i = 0, ii = worker.length; i < ii; i++) {
+        split = worker[i].split('/').splice(1);
+
+        object = data;
+
+        for (j = 0, jj = split.length; j < jj; j++) {
+            if (j === (jj - 1)) {
+                object[split[j]] = {
+                    data: ctx.$store.getters[worker[i] + '/worker/data'],
+                    form: ctx.$store.getters[worker[i] + '/worker/form'],
+                    filter: ctx.$store.getters[worker[i] + '/worker/filter']
+                };
+            }
+            else {
+                object[split[j]] = object[split[j]] || {};
+            }
+
+            object = object[split[j]];
+        }
+    }
+
+    return data;
 };
 
 const initList = function(ctx, worker, data) {
@@ -79,15 +120,16 @@ const initList = function(ctx, worker, data) {
     }
 };
 
-const fetch = function(ctx, worker, dataStage, dataRequest, options) {
-    var keys,
-        item;
+const fetch = function(ctx, worker, dataStage, dataRequest) {
+    var item;
 
-    options = options || {};
+    dataRequest = dataRequest || {};
 
-    if (options.find && options.in) {
-        item = ctx.$store.getters[options.in + '/worker/find'](dataStage[options.find]);
+    if (dataRequest.find) {
+        item = ctx.$store.getters[dataRequest.find.in + '/worker/find'](dataStage[dataRequest.find.model]);
     }
+
+    delete dataRequest.find;
 
     return new Promise((resolve) => {
         if (item) {
@@ -96,12 +138,13 @@ const fetch = function(ctx, worker, dataStage, dataRequest, options) {
             resolve();
         }
         else {
-            stageAndRequest(ctx, worker, dataStage).then(resolve);
+            stageAndRequest(ctx, worker, dataStage, dataRequest).then(resolve);
         }
     });
-}
+};
 
 export {
+    form,
     clear,
     stage,
     reset,

@@ -2,12 +2,12 @@
     <div>
         <this-list
             :show-create-button="true"
-            :items="_payload.list.data.items"
-            :total="_payload.list.data.total"
-            :per-page="_payload.list.data.per_page"
-            :current-page="_payload.list.data.current_page"
-            :status="_payload.list.form.status"
-            :filters="_payload.list.filter.data"
+            :items="_payload.user.list.data.items"
+            :total="_payload.user.list.data.total"
+            :per-page="_payload.user.list.data.per_page"
+            :current-page="_payload.user.list.data.current_page"
+            :status="_payload.user.list.form.status"
+            :filters="_payload.user.list.filter.data"
             @create="$router.push({name: 'user-create'})"
             @refresh="request"
             @silent="request({silent: true})"
@@ -38,9 +38,7 @@
     export default {
         computed: {
             _payload() {
-                return {
-                    list: store.payload(this, 'demo/user/list')
-                };
+                return store.payload(this, 'demo/user/list');
             }
         },
 
