@@ -47,7 +47,6 @@ const request = function(ctx, worker, data) {
                     ctx.$store.dispatch(data.sync[i] + '/worker/sync', res.data.data);
                 }
             }
-
         }, reject);
     });
 };

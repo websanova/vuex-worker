@@ -7,23 +7,13 @@ export default {
         worker: update
     },
 
-    // request: {
-    //     url(ctx, payload) {
-    //         return 'demos/users/' + payload.stage.data.user.id +  '/update';
-    //     },
-
-    //     onSuccess(ctx, res) {
-    //         this.worker('demo/user/list').work('sync', res.data.data);
-    //         this.worker('demo/user/fetch').work('sync', res.data.data);
-    //     }
-    // },
-
     actions: {
         request(ctx, data) {
             var stage = ctx.getters['worker/stage'];
 
             return ctx.dispatch('worker/send', Object.assign(data, {
-                url: 'demos/users/' + stage.data.user.id +  '/update'
+                url: 'demos/users/' + stage.data.user.id +  '/update',
+                sync: ['demo/user/fetch', 'demo/user/list']
             }));
         },
 

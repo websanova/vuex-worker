@@ -12,7 +12,8 @@ export default {
             var stage = ctx.getters['worker/stage'];
 
             return ctx.dispatch('worker/send', Object.assign(data, {
-                url: 'demos/users/' + stage.data.user.id +  '/undelete'
+                url: 'demos/users/' + stage.data.user.id +  '/undelete',
+                sync: 'demo/user/list'
             }));
         }
     }

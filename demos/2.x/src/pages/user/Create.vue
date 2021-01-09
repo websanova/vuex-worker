@@ -7,14 +7,14 @@
                 </td>
                 <td>
                     <input
-                        :value="_payload.create.form.fields.first_name"
-                        @change="_worker.create.work('form/update', {first_name: $event.target.value})"
+                        :value="_payload.user.create.form.fields.first_name"
+                        @input="input({first_name: $event.target.value})"
                     />
                     <div
-                        v-if="_payload.create.form.errors.first_name"
+                        v-if="_payload.user.create.form.errors.first_name"
                         class="text-danger text-sm"
                     >
-                        {{ _payload.create.form.errors.first_name }}
+                        {{ _payload.user.create.form.errors.first_name }}
                     </div>
                 </td>
             </tr><tr>
@@ -23,14 +23,14 @@
                 </td>
                 <td>
                     <input
-                        :value="_payload.create.form.fields.last_name"
-                        @change="_worker.create.work('form/update', {last_name: $event.target.value})"
+                        :value="_payload.user.create.form.fields.last_name"
+                        @input="input({last_name: $event.target.value})"
                     />
                     <div
-                        v-if="_payload.create.form.errors.last_name"
+                        v-if="_payload.user.create.form.errors.last_name"
                         class="text-danger text-sm"
                     >
-                        {{ _payload.create.form.errors.last_name }}
+                        {{ _payload.user.create.form.errors.last_name }}
                     </div>
                 </td>
             </tr><tr>
@@ -39,14 +39,14 @@
                 </td>
                 <td>
                     <input
-                        :value="_payload.create.form.fields.email"
-                        @change="_worker.create.work('form/update', {email: $event.target.value})"
+                        :value="_payload.user.create.form.fields.email"
+                        @change="input({email: $event.target.value})"
                     />
                     <div
-                        v-if="_payload.create.form.errors.email"
+                        v-if="_payload.user.create.form.errors.email"
                         class="text-danger text-sm"
                     >
-                        {{ _payload.create.form.errors.email }}
+                        {{ _payload.user.create.form.errors.email }}
                     </div>
                 </td>
             </tr><tr>
@@ -59,7 +59,7 @@
                         <li>
                             <button
                                 @click="create"
-                                :disabled="_payload.create.form.loading"
+                                :disabled="_payload.user.create.form.loading"
                             >
                                 Create
                             </button>
@@ -67,7 +67,7 @@
                         <li>
                             <button
                                 @click="reset"
-                                :disabled="_payload.create.form.loading"
+                                :disabled="_payload.user.create.form.loading"
                             >
                                 Reset
                             </button>
@@ -75,7 +75,7 @@
 
                         <li>
                             <span
-                                v-show="_payload.create.form.loading"
+                                v-show="_payload.user.create.form.loading"
                                 class="spinner"
                             />
                         </li>
@@ -87,35 +87,29 @@
 </template>
 
 <script>
+    import * as store from '../../helpers/store.js';
+
     export default {
         computed: {
-            _worker() {
-                return {
-                    create: this.$store.worker('demo/user/create'),
-                };
-            },
-
             _payload() {
-                return {
-                    create: this._worker.create.payload(),
-                };
+                return store.payload(this, 'demo/user/create');
             }
         },
 
         methods: {
             reset() {
-                this._worker.create.work('clear');
+                store.clear(this, 'demo/user/create');
+            },
+
+            input(data) {
+                store.form(this, 'demo/user/create', data);
             },
 
             create() {
-                this._worker
-                    .create
-                    .request()
-                    .then(() => {
-                        this.reset();
-
-                        this.$router.push({name: 'user-list'});
-                    });
+                store.request(
+                    this, 'demo/user/create',
+                    {clear: true, push: {name: 'user-list'}}
+                );
             }
         }
     }

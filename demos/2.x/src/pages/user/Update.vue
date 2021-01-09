@@ -135,7 +135,7 @@
             )
             .then(() => {
                 this.reset();
-            })
+            });
         },
 
         methods: {
@@ -151,8 +151,7 @@
                 store.stageAndRequest(
                     this,
                     'demo/user/update',
-                    {user: this._payload.user.fetch.data},
-                    {sync: ['demo/user/fetch', 'demo/user/list']}
+                    {user: this._payload.user.fetch.data}
                 );
             },
 
@@ -165,7 +164,7 @@
                     this,
                     'demo/user/delete',
                     {user: this._payload.user.fetch.data},
-                    {sync: 'demo/user/list', push: {name: 'user-list'}}
+                    {push: {name: 'user-list'}}
                 );
             }
         },

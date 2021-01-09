@@ -1,58 +1,45 @@
 <template>
     <this-load
-        :status="_payload.fetch.form.status"
-        :error-msg="(_payload.fetch.form.errors['general'] || {}).msg"
+        :status="_payload.user.fetch.form.status"
+        :error-msg="(_payload.user.fetch.form.errors['general'] || {}).msg"
     >
         <div class="text-center">
             <img
-                :src="_payload.fetch.data.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'"
+                :src="_payload.user.fetch.data.avatar || '//www.gravatar.com/avatar/?d=identicon&s=200'"
                 width="100"
             />
 
             <div
                 class="text-bold py-1"
             >
-                {{ _payload.fetch.data.first_name }} {{ _payload.fetch.data.last_name }}
+                {{ _payload.user.fetch.data.first_name }} {{ _payload.user.fetch.data.last_name }}
             </div>
         </div>
     </this-load>
 </template>
 
 <script>
-    import * as fetch from '../../helpers/fetch.js';
-
+    import * as store from '../../helpers/store.js';
     import ThisLoad   from '../../elements/Load.vue';
 
     export default {
         computed: {
-            _worker() {
-                return {
-                    list: this.$store.worker('demo/user/list'),
-                    fetch: this.$store.worker('demo/user/fetch'),
-                };
-            },
-
             _payload() {
-                return {
-                    fetch: this._worker.fetch.payload()
-                };
+                return store.payload(this, 'demo/user/fetch');
             }
         },
 
         mounted() {
-            fetch.mounted(
-                this._worker.fetch,
-                this._worker.list,
-                {
-                    user: {
-                        id: this.$route.params.user_id
-                    }
-                }
+            store.fetch(
+                this,
+                'demo/user/fetch',
+                {user: {id: this.$route.params.user_id}},
+                {find: {model: 'user', in: 'demo/user/list'}}
             );
         },
 
         destroyed() {
-            fetch.destroyed(this._worker.fetch);
+            store.clear(this, 'demo/user/fetch');
         },
 
         components: {

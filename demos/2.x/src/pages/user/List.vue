@@ -73,12 +73,7 @@
             },
 
             undelete(data) {
-                store.stageAndRequest(
-                    this,
-                    'demo/user/undelete',
-                    data,
-                    {sync: 'demo/user/list'}
-                );
+                store.stageAndRequest(this, 'demo/user/undelete', data);
             }
         },
 

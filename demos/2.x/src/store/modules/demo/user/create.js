@@ -7,20 +7,25 @@ export default {
         worker: create
     },
 
-    request: {
-        url: 'demos/users/create',
+    actions: {
+        request(ctx, data) {
+            return new Promise((resolve, reject) => {
+                ctx.dispatch('worker/send', Object.assign(data, {
+                    url: 'demos/users/create'
+                }))
+                .then((res) => {
+                    var filter = this.getters['demo/user/list/worker/filter/fields'];
 
-        success(ctx, res) {
-            var worker = this.worker('demo/user/list');
-            var role   = worker.payload().filter.fields.role;
-            var state  = worker.payload().filter.fields.state;
-            
-            if (
-                (role === '' || res.data.data.role === role) &&
-                (state === '' || state === 'active')
-            ) {
-                worker.work('prepend', res.data.data);
-            }
+                    if (
+                        (filter.role === '' || res.data.data.role === filter.role) &&
+                        (filter.state === '' || filter.state === 'active')
+                    ) {
+                        this.dispatch('demo/user/list/prepend', res.data.data);
+                    }
+
+                    resolve();
+                }, reject)
+            })
         }
     }
 }

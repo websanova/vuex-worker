@@ -7,12 +7,6 @@ export default {
         worker: fetch
     },
 
-    // request: {
-    //     url(ctx, payload) {
-    //         return 'demos/users/' + payload.stage.data.user.id +  '/fetch';
-    //     }
-    // }
-
     actions: {
         request(ctx, data) {
             var stage = ctx.getters['worker/stage'];
