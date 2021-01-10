@@ -1,4 +1,4 @@
-import list from '@websanova/vuex-worker/src/actions/list';
+import list from '@websanova/vuex-worker/src/actions/list.js';
 
 export default {
     namespaced: true,

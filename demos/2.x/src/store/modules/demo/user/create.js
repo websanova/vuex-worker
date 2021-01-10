@@ -1,4 +1,4 @@
-import create from '@websanova/vuex-worker/src/actions/create';
+import create from '@websanova/vuex-worker/src/actions/create.js';
 
 export default {
     namespaced: true,

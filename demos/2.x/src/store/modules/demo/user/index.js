@@ -1,10 +1,10 @@
-import list     from './list';
-import fetch    from './fetch';
-import create   from './create';
-import avatar   from './avatar';
-import update   from './update';
-import deleat   from './delete';
-import undelete from './undelete';
+import list     from './list.js';
+import fetch    from './fetch.js';
+import create   from './create.js';
+import avatar   from './avatar.js';
+import update   from './update.js';
+import deleat   from './delete.js';
+import undelete from './undelete.js';
 
 export default {
     namespaced: true,

@@ -116,7 +116,7 @@
 </template>
 
 <script>
-    import * as store from '../../helpers/store.js';
+    import * as store from '@websanova/vuex-worker/src/helpers/store.js';
     import ThisLoad   from '../../elements/Load.vue';
 
     export default {

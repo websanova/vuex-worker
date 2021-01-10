@@ -1,4 +1,4 @@
-import fetch from '@websanova/vuex-worker/src/actions/fetch';
+import fetch from '@websanova/vuex-worker/src/actions/fetch.js';
 
 export default {
     namespaced: true,

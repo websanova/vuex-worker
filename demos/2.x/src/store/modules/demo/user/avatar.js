@@ -1,5 +1,4 @@
-import Vue    from 'vue';
-import upload from '@websanova/vuex-worker/src/actions/upload';
+import upload from '@websanova/vuex-worker/src/actions/upload.js';
 
 export default {
     namespaced: true,

@@ -1,4 +1,4 @@
-import update from '@websanova/vuex-worker/src/actions/update';
+import update from '@websanova/vuex-worker/src/actions/update.js';
 
 export default {
     namespaced: true,
