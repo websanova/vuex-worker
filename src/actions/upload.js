@@ -56,7 +56,6 @@ export default {
                 }
             };
 
-
             Vue.upload.on(ctx.state.key, data);
 
             ctx.commit('onEnd', Vue.upload.state.instances[ctx.state.key].options.onEnd);
