@@ -1,6 +1,6 @@
 import Vue   from 'vue';
-import form  from '../utils/form';
-import stage from '../utils/stage';
+import form  from '../utils/form.js';
+import stage from '../utils/stage.js';
 
 export default {
     namespaced: true,

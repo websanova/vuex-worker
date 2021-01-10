@@ -1,9 +1,9 @@
 import Vue    from 'vue';
-import form   from '../utils/form';
-import stage  from '../utils/stage';
-import filter from '../utils/filter';
+import form   from '../utils/form.js';
+import stage  from '../utils/stage.js';
+import filter from '../utils/filter.js';
 
-import {findIndexByKey} from '../utils.js';
+import {findIndexByKey} from '../lib/utils.js';
 
 export default {
     namespaced: true,

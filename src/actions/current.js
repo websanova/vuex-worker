@@ -1,4 +1,4 @@
-import stage from '../utils/stage';
+import stage from '../utils/stage.js';
 
 export default {
     namespaced: true,
