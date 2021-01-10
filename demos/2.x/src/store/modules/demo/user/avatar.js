@@ -8,31 +8,29 @@ export default {
         worker: upload
     },
 
-    hooks: {
-        created(ctx) {
+    actions: {
+        reset(ctx) {
             ctx.dispatch('worker/on', {
                 key: 'user-avatar',
 
                 onSuccess(file, res) {
-                    this.worker('demo/user/list').work('sync', res.data.data);
-                    this.worker('demo/user/fetch').work('sync', res.data.data);
+                    this.dispatch('demo/user/list/worker/sync', res.data.data);
+                    this.dispatch('demo/user/fetch/worker/sync', res.data.data);
                 }
             });
         },
 
-        beforeDestroy(ctx) {
+        unset(ctx) {
             ctx.dispatch('worker/off');
-        }
-    },
+        },
 
-    actions: {
-        send(ctx) {
-            var payload = this.worker('demo/user/avatar').payload();
+        request(ctx, data) {
+            var stage = ctx.getters['worker/stage'];
 
             ctx
-            .dispatch('worker/send', {
-                url: 'demos/users/' + payload.stage.data.user.id +  '/avatar'
-            })
+            .dispatch('worker/send', Object.assign({
+                url: 'demos/users/' + stage.data.user.id +  '/avatar'
+            }, data));
         }
     }
 }

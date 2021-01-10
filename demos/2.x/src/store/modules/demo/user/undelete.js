@@ -12,9 +12,9 @@ export default {
             var stage = ctx.getters['worker/stage'];
 
             return new Promise((resolve, reject) => {
-                ctx.dispatch('worker/send', Object.assign(data, {
+                ctx.dispatch('worker/send', Object.assign({
                     url: 'demos/users/' + stage.data.user.id +  '/undelete'
-                }))
+                }, data))
                 .then((res) => {
                     this.dispatch('demo/user/list/worker/sync', res.data.data);
                     this.dispatch('demo/user/fetch/worker/sync', res.data.data);

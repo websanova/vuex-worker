@@ -40,8 +40,9 @@ export default {
 
     actions: {
         on(ctx, data) {
-            ctx.commit('key', data.key || Math.random().toString());
             var success;
+            
+            ctx.commit('key', data.key || Math.random().toString());
             
             data = data || {};
 

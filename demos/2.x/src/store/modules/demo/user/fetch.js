@@ -11,9 +11,9 @@ export default {
         request(ctx, data) {
             var stage = ctx.getters['worker/stage'];
 
-            return ctx.dispatch('worker/send', Object.assign(data, {
+            return ctx.dispatch('worker/send', Object.assign({
                 url: 'demos/users/' + stage.data.user.id +  '/fetch'
-            }));
+            }, data));
         }
     }
 }

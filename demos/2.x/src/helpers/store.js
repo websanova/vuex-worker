@@ -24,6 +24,10 @@ const reset = function(ctx, worker, data) {
     ctx.$store.dispatch(worker + '/reset', data || {});
 }
 
+const unset = function(ctx, worker, data) {
+    ctx.$store.dispatch(worker + '/unset', data || {});
+}
+
 const request = function(ctx, worker, data) {
     return ctx
         .$store
@@ -128,6 +132,7 @@ export {
     clear,
     stage,
     reset,
+    unset,
     fetch,
     filter,
     request,

@@ -37,9 +37,9 @@ export default {
         },
 
         request(ctx, data) {
-            return ctx.dispatch('worker/send', Object.assign(data, {
+            return ctx.dispatch('worker/send', Object.assign({
                 url: 'demos/users/list'
-            }));
+            }, data));
         }
     }
 }

@@ -34,8 +34,8 @@
                     />
                 </td>
                 <td>
-                    <!-- <span
-                        v-if="_payload.avatar.form.loading"
+                    <span
+                        v-if="_payload.user.avatar.form.loading"
                         class="spinner"
                     >Uploading...</span>
 
@@ -44,7 +44,7 @@
                         @click="avatar"
                     >
                         Update Avatar
-                    </button> -->
+                    </button>
                 </td>
             </tr><tr>
                 <td>
@@ -122,11 +122,13 @@
     export default {
         computed: {
             _payload() {
-                return store.payload(this, ['demo/user/fetch', 'demo/user/update']);
+                return store.payload(this, ['demo/user/fetch', 'demo/user/update', 'demo/user/avatar']);
             }
         },
 
         mounted() {
+            store.reset(this, 'demo/user/avatar');
+            
             store.fetch(
                 this,
                 'demo/user/fetch',
@@ -136,6 +138,10 @@
             .then(() => {
                 this.reset();
             });
+        },
+
+        beforeDestroy() {
+            store.unset(this, 'demo/user/avatar');
         },
 
         methods: {
@@ -155,9 +161,9 @@
                 );
             },
 
-            // avatar() {
-            //     avatar.request(this._worker.avatar, {user: this._payload.fetch.data});
-            // },
+            avatar() {
+                store.stageAndRequest(this, 'demo/user/avatar', {user: this._payload.user.fetch.data});
+            },
 
             delete() {
                 store
