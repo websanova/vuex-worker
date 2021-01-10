@@ -1,11 +1,11 @@
 {
-    "name": "@websanova/vue-knob",
+    "name": "@websanova/vuex-worker",
 
-    "description": "A simple, light weight and intuitive knob component for Vue.js.",
+    "description": "Wrapper package for vuex workers.",
   
-    "keywords": ["vue", "vue.js", "vuejs", "plugin", "component", "knob", "dial", "switch", "tuner"],
+    "keywords": ["vue", "vue.js", "vuejs", "vuex", "worker"],
 
-    "homepage": "https://websanova.com/docs/vue-knob",
+    "homepage": "https://websanova.com",
 
     "author": {
         "name": "Websanova",
@@ -20,7 +20,7 @@
   
     "repository": {
         "type": "git",
-        "url": "https://github.com/websanova/vue-knob"
+        "url": "https://github.com/websanova/vuex-worker"
     },
   
     "licenses": "MIT, GPL",
