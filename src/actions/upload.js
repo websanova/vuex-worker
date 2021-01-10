@@ -59,9 +59,9 @@ export default {
 
             Vue.upload.on(ctx.state.key, data);
 
-            ctx.commit('onEnd', Vue.upload.instances[ctx.state.key].options.onEnd);
-            ctx.commit('onError', Vue.upload.instances[ctx.state.key].options.onError);
-            ctx.commit('onSuccess', Vue.upload.instances[ctx.state.key].options.onSuccess);
+            ctx.commit('onEnd', Vue.upload.state.instances[ctx.state.key].options.onEnd);
+            ctx.commit('onError', Vue.upload.state.instances[ctx.state.key].options.onError);
+            ctx.commit('onSuccess', Vue.upload.state.instances[ctx.state.key].options.onSuccess);
         },
 
         off(ctx) {
@@ -88,13 +88,13 @@ export default {
             //       In this case it will just resolve once onEnd which "should"
             //       always fire.
 
-            multiple = Vue.upload.instances[ctx.state.key].options.multiple;
+            multiple = Vue.upload.state.instances[ctx.state.key].options.multiple;
 
             if (multiple) {
                 return new Promise((resolve) => {
                     Vue.upload.option(ctx.state.key, 'onEnd', () => {
                         if (ctx.state.onEnd) {
-                            ctx.state.onEnd.call(Vue.upload.instances[ctx.state.key]);
+                            ctx.state.onEnd.call(Vue.upload.state.instances[ctx.state.key]);
                         }
 
                         resolve();
@@ -109,7 +109,7 @@ export default {
             return new Promise((resolve, reject) => {
                 Vue.upload.option(ctx.state.key, 'onSuccess', (file, res) => {
                     if (ctx.state.onSuccess) {
-                        ctx.state.onSuccess.call(Vue.upload.instances[ctx.state.key], file, res);
+                        ctx.state.onSuccess.call(Vue.upload.state.instances[ctx.state.key], file, res);
                     }
 
                     resolve(res);
@@ -117,7 +117,7 @@ export default {
 
                 Vue.upload.option(ctx.state.key, 'onError', (file, res) => {
                     if (ctx.state.onError) {
-                        ctx.state.onError.call(Vue.upload.instances[ctx.state.key], file, res);
+                        ctx.state.onError.call(Vue.upload.state.instances[ctx.state.key], file, res);
                     }
 
                     reject(res);
