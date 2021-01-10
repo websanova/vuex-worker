@@ -9,11 +9,14 @@ export default {
 
     actions: {
         reset(ctx) {
+            var filter = ctx.getters['worker/filter/fields'];
+
             ctx.dispatch('worker/filter/reset', {
                 page: 1,
                 query: '',
                 role: {
                     default: '',
+                    value: filter.role || '',
                     options: [
                         {value: '', label: 'All Roles'},
                         'super',
@@ -23,6 +26,7 @@ export default {
                 },
                 state: {
                     default: '',
+                    value: filter.state || '',
                     options: [
                         {value: '', label: 'All States'},
                         'active',
