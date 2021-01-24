@@ -5,6 +5,9 @@
         :links="[{
             to: {name: 'user-list'},
             text: 'List'
+        }, {
+            to: {name: 'user-show', params: {user_id: 9999999}},
+            text: 'Error'
         }]"
     >
         <router-view />
