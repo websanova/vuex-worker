@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import * as store from '@websanova/vuex-worker/src/helpers/store.js';
+    import * as store   from '@websanova/vuex-worker/src/helpers/store.js';
     import ThisList     from '../../elements/List.vue';
     import ThisUserItem from '../../elements/UserItem.vue';
 
@@ -42,17 +42,17 @@
             }
         },
 
-        beforeCreate() {
-            store.reset(this, 'demo/user/list');
-        },
-
         mounted() {
-            store.initList(this, 'demo/user/list', {
+            store.reset(this, 'demo/user/list', {
                 page: this.$route.query.page,
                 role: this.$route.query.role,
                 state: this.$route.query.state,
                 query: this.$route.query.query,
             });
+
+            store.request(this, 'demo/user/list');
+
+            store.filterPath(this, 'demo/user/list', true);
         },
 
         destroyed() {
@@ -66,6 +66,8 @@
         methods: {
             filter(data) {
                 store.filterAndRequest(this, 'demo/user/list', data);
+
+                store.filterPath(this, 'demo/user/list');
             },
 
             request(data) {

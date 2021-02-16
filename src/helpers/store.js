@@ -81,23 +81,23 @@ const payload = function(ctx, worker) {
     return data;
 };
 
-const initList = function(ctx, worker, data) {
-    var form   = ctx.$store.getters[worker + '/worker/form'],
-        filter = ctx.$store.getters[worker + '/worker/filter'],
-        query  = filter.query;
+const filterPath = function(ctx, worker, replace) {
+    var i,
+        queryNew = ctx.$store.getters[worker + '/worker/filter/query'],
+        queryOld = Object.assign({}, ctx.$route.query),
+        isChange = false;
 
-    if (form.status === null) {
-        ctx.$store.dispatch(worker + '/worker/filter/update', data || {});
-        
-        return ctx.$store.dispatch(worker + '/request', {});
+    for (i in queryNew) {
+        if (queryOld[i] != queryNew[i]) {
+            queryOld[i] = queryNew[i];
+
+            isChange = true;
+        }
     }
-    else if (Object.keys(query).length) {
-        return new Promise(function(resolve) {
-            ctx.$router.replace({
-                query: query
-            });
 
-            resolve();
+    if (isChange) {
+        ctx.$router[replace ? 'replace' : 'push']({
+            query: queryNew
         });
     }
 };
@@ -137,7 +137,7 @@ export {
     filter,
     request,
     payload,
-    initList,
+    filterPath,
     stageAndRequest,
     filterAndRequest,
 };

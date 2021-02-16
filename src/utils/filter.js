@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 export default {
     namespaced: true,
 
@@ -14,7 +12,25 @@ export default {
     },
     
     mutations: {
-        reset(state, filters) {
+        data(state, data) {
+            state.data = data;
+        },
+
+        previous(state, fields) {
+            state.previous = JSON.parse(JSON.stringify(fields));
+        },
+
+        update(state, data) {
+            var i;
+
+            for (i in data) {
+                this._vm.$set(state.data, i, data[i]);
+            }
+        }
+    },
+
+    actions: {
+        reset(ctx, filters) {
             var i,
                 j, jj,
                 options,
@@ -59,33 +75,9 @@ export default {
                 }
             }
 
-            state.data = data;
-        },
-
-        previous(state, fields) {
-            this._vm.$set(state, 'previous', JSON.parse(JSON.stringify(fields)));
-        },
-
-        update(state, data) {
-            var i;
-
-            for (i in data) {
-                this._vm.$set(state.data, i, data[i]);
-            }
-        },
-
-        timer(state, timer) {
-            state.timer = timer;
-        }
-    },
-
-    actions: {
-        reset(ctx, filters) {
-            ctx.commit('reset', filters);
+            ctx.commit('data', data);
 
             ctx.commit('previous', ctx.getters['fields']);
-
-            ctx.dispatch('path');
         },
 
         update(ctx, filters) {
@@ -96,65 +88,21 @@ export default {
                 data = JSON.parse(JSON.stringify(ctx.state.data));
 
             for (i in filters) {
-                (function (i) {
-                    if (data[i]) {
-                        data[i].value = filters[i] === undefined ? data[i].default : filters[i];
-                    }
+                if (data[i]) {
+                    data[i].value = filters[i] === undefined ? data[i].default : filters[i];
+                }
 
-                    for (j = 0, jj = data[i].reset.length; j < jj; j++) {
-                        if (!filters[data[i].reset[j]]) {
-                            data[data[i].reset[j]].value = data[data[i].reset[j]].default;
-                        }
+                for (j = 0, jj = data[i].reset.length; j < jj; j++) {
+
+                    if (!filters[data[i].reset[j]]) {
+                        data[data[i].reset[j]].value = data[data[i].reset[j]].default;
                     }
-                })(i);
+                }
             }
 
-            ctx.commit('update', data);
+            ctx.commit('previous', ctx.getters['fields']);
             
-            if (ctx.state.timer) {
-                clearTimeout(ctx.state.timer);
-                ctx.commit('timer', null);
-            }
-
-            timer = setTimeout(() => {
-                ctx.dispatch('path');
-
-                ctx.commit('previous', ctx.getters['fields']);
-            }, 50);
-
-            ctx.commit('timer', timer);
-        },
-
-        path(ctx) {
-            var i,
-                $route = Vue.router.app.$route,
-                $router = Vue.router.app.$router,
-                route = {
-                    path: $route.path,
-                    name: $route.name,
-                    hash: $route.hash,
-                    query: JSON.parse(JSON.stringify($route.query || {}))
-                };
-
-            for (i in ctx.state.data) {
-                if (
-                    ctx.state.data[i].show !== false &&
-                    ctx.state.data[i].default !== ctx.state.data[i].value
-                ) {
-                    route.query[i] = ctx.state.data[i].value;
-                }
-                else {
-                    delete route.query[i];
-                }
-            }
-
-            if (ctx.getters.isChange) {
-                $router
-                    .push(route)
-                    .catch(() => {
-                        // console.log($e);
-                    });
-            }
+            ctx.commit('update', data);
         }
     },
 
@@ -179,6 +127,8 @@ export default {
                 query = {};
 
             for (i in state.data) {
+                query[i] = undefined;
+                
                 if (
                     state.data[i].show !== false &&
                     state.data[i].default !== state.data[i].value

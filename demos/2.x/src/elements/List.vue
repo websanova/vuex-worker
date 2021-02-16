@@ -117,7 +117,13 @@
             currentPage: Number,
             status: String,
             filters: Object,
-            showCreateButton: Boolean,
+            showCreateButton: Boolean
+        },
+
+        data() {
+            return {
+                timer: null
+            }
         },
 
         computed: {
@@ -142,29 +148,21 @@
             }
         },
 
-        mounted() {
-            this.reset();
+        watch: {
+            '$route.query'(val) {
+                var i,
+                    data    = {},
+                    filters = this.filters;
+
+                for (i in filters) {
+                    data[i] = this.$route.query[i];
+                }
+
+                this.$emit('filter', data);
+            }
         },
 
         methods: {
-            reset() {
-                this.setWatches();
-            },
-
-            setWatches() {
-                var i;
-
-                if (this.filters) {
-                    for (i in this.filters) {
-                        ((i) => {
-                            this.$watch('$route.query.' + i, (val) => {
-                                this.emitFilter(i, val);
-                            });
-                        })(i);
-                    }
-                }
-            },
-
             emitFilter(key, val) {
                 var data = {};
 
