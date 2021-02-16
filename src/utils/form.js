@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 export default {
     namespaced: true,
 
@@ -56,18 +54,18 @@ export default {
         },
 
         clearFields(state) {
-            Vue.set(state, 'fields', {});
+            this._vm.$set(state, 'fields', {});
         },
 
         clearErrors(state) {
-            Vue.set(state, 'errors', {});
+            this._vm.$set(state, 'errors', {});
         },
 
         updateFields(state, fields) {
             var i;
 
             for (i in fields) {
-                Vue.set(state.fields, i, fields[i]);
+                this._vm.$set(state.fields, i, fields[i]);
             }
         },
 
@@ -78,7 +76,7 @@ export default {
 
             for (i = 0, ii = errors.length; i < ii; i++) {
                 if ( ! state[errors[i].field]) {
-                    Vue.set(state.errors, errors[i].field, (errors[i].msg || errors[i].message));
+                    this._vm.$set(state.errors, errors[i].field, (errors[i].msg || errors[i].message));
                 }
             }
         },
@@ -136,24 +134,6 @@ export default {
             }
         },
 
-        // fire(ctx, data) {
-        //     data = data || {};
-
-        //     return new Promise((resolve, reject) => {
-        //         Vue.http({
-        //                 method: data.method || 'get',
-        //                 url: data.url,
-        //                 params: data.body || data.params,
-        //                 body: Object.assign({}, data.body, ctx.state.fields)
-        //             })
-        //             .then((res) => {
-        //                 resolve(res);
-        //             }, (res) => {
-        //                 reject(res);
-        //             });
-        //     });
-        // },
-
         send(ctx, data) {
             var body,
                 timer,
@@ -196,8 +176,8 @@ export default {
 
                     body = Object.assign({}, data.body, ctx.state.fields);
 
-                    if (Vue.axios && Vue.axios.CancelToken) {
-                        token = Vue.axios.CancelToken.source().token;
+                    if (this._vm.axios && this._vm.axios.CancelToken) {
+                        token = this._vm.axios.CancelToken.source().token;
 
                         ctx.commit('request', {
                             abort: function () {
@@ -206,7 +186,7 @@ export default {
                         });
                     }
 
-                    (Vue.http || Vue.axios)({
+                    (this._vm.http || this._vm.axios)({
                             method: data.method || 'get',
                             url: data.url,
                             params: data.body || data.params,

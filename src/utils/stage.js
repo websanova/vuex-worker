@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 export default {
     namespaced: true,
 
@@ -14,7 +12,7 @@ export default {
             var i;
 
             for (i in data) {
-                Vue.set(state.data, i, data[i]);
+                this._vm.$set(state.data, i, data[i]);
             }
         }
     },

@@ -14,6 +14,12 @@ export default {
             return ctx.dispatch('worker/send', Object.assign({
                 url: 'demos/users/' + stage.data.user.id +  '/fetch'
             }, data));
+        },
+
+        sync(ctx) {
+            ctx.dispatch('worker/sync', {
+                middle_name: 'Sync'
+            })
         }
     }
 }

@@ -1,4 +1,3 @@
-import Vue   from 'vue';
 import form  from '../utils/form.js';
 import stage from '../utils/stage.js';
 
@@ -18,16 +17,14 @@ export default {
     
     mutations: {
         data(state, data) {
-            Vue.set(state, 'data', data);
+            state.data = data;
         },
 
         sync(state, data) {
             var i;
 
-            for (i in state.data) {
-                if (data[i] !== undefined) {
-                    Vue.set(state.data, i, data[i]);
-                }
+            for (i in data) {
+                this._vm.$set(state.data, i, data[i]);
             }
         }
     },

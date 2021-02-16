@@ -9,7 +9,7 @@ export default {
 
             timer: null,
 
-            interval: 1750
+            timeout: 1750
         };
     },
     
@@ -36,8 +36,8 @@ export default {
             state.timer = timer;
         },
 
-        interval(state, interval) {
-            state.interval = interval;
+        timeout(state, timeout) {
+            state.timeout = timeout;
         },
 
         clear(state) {
@@ -49,8 +49,8 @@ export default {
         reset(ctx, data) {
             data = data || {};
 
-            if (data.interval) {
-                ctx.commit('interval', data.interval);
+            if (data.timeout) {
+                ctx.commit('timeout', data.timeout);
             }
         },
 
@@ -59,7 +59,7 @@ export default {
 
             data.id       = data.id       || Math.random().toString(32).substring(2);
             data.type     = data.type     || 'info';
-            data.interval = data.interval || ctx.state.interval;
+            data.timeout = data.timeout || ctx.state.timeout;
 
             ctx.commit('add', data);
 
@@ -87,7 +87,7 @@ export default {
         start(ctx) {
             var id,
                 timer,
-                interval;
+                timeout;
 
             id = ctx.state.queue[ctx.state.queue.length - 1];
 
@@ -95,20 +95,20 @@ export default {
                 return;
             }
             
-            interval = ctx.state.data[id].interval || ctx.state.interval;
+            timeout = ctx.state.data[id].timeout || ctx.state.timeout;
 
             clearTimeout(ctx.state.timer);
 
             timer = setTimeout(() => {
                 ctx.dispatch('remove', id);
                 ctx.dispatch('end');
-            }, interval);
+            }, timeout);
 
             ctx.commit('timer', timer);
         },
 
         /**
-         * Clear the interval and timer if there are no more
+         * Clear the timeout and timer if there are no more
          * items left in the queue. We can also do a clear on
          * the data to do a little failsafe garbage collect.
          */
@@ -155,7 +155,7 @@ export default {
     getters: {
 
         /**
-         * Comine this in real time for some fail over in case
+         * Combine this in real time for some fail over in case
          * an item is removed manually but still in queue. This
          * will help to remove any strange oddities that may occur.
          */

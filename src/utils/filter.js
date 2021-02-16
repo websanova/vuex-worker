@@ -17,8 +17,6 @@ export default {
         reset(state, filters) {
             var i,
                 j, jj,
-                query = Vue.router.app.$route.query,
-                params = Vue.router.app.$route.params,
                 options,
                 labelKey,
                 valueKey,
@@ -46,7 +44,7 @@ export default {
                 data[i] = {
                     as: filters[i].as || i,
                     default: ddefault,
-                    value: filters[i].value !== undefined ? filters[i].value : (query[i] !== undefined ? query[i] : (params[i] !== undefined ? params[i] : ddefault)),
+                    value: filters[i].value !== undefined ? filters[i].value : ddefault,
                     show: filters[i].show,
                     reset: filters[i].reset || [],
                     options: options.length ? options : null,
@@ -61,18 +59,18 @@ export default {
                 }
             }
 
-            Vue.set(state, 'data', data);
+            state.data = data;
         },
 
         previous(state, fields) {
-            Vue.set(state, 'previous', JSON.parse(JSON.stringify(fields)));
+            this._vm.$set(state, 'previous', JSON.parse(JSON.stringify(fields)));
         },
 
         update(state, data) {
             var i;
 
             for (i in data) {
-                Vue.set(state.data, i, data[i]);
+                this._vm.$set(state.data, i, data[i]);
             }
         },
 

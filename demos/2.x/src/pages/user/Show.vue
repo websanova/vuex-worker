@@ -12,8 +12,14 @@
             <div
                 class="text-bold py-1"
             >
-                {{ _payload.user.fetch.data.first_name }} {{ _payload.user.fetch.data.last_name }}
+                {{ _payload.user.fetch.data.first_name }} {{ _payload.user.fetch.data.middle_name }} {{ _payload.user.fetch.data.last_name }}
             </div>
+
+            <button
+                @click="sync"
+            >
+                Sync
+            </button>
         </div>
     </this-load>
 </template>
@@ -40,6 +46,12 @@
 
         destroyed() {
             store.clear(this, 'demo/user/fetch');
+        },
+
+        methods: {
+            sync() {
+                this.$store.dispatch('demo/user/fetch/sync');
+            }
         },
 
         components: {
