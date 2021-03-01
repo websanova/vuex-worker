@@ -164,6 +164,9 @@ export default {
                 }
 
                 timer = setTimeout(() => {
+                    var $http  = this._vm.http  || this._vm.$http;
+                    var $axios = this._vm.axios || this._vm.$axios;
+
                     ctx.dispatch('start', {
                         msg: data.msg,
                         clear: data.clear,
@@ -176,8 +179,8 @@ export default {
 
                     body = Object.assign({}, data.body, ctx.state.fields);
 
-                    if (this._vm.axios && this._vm.axios.CancelToken) {
-                        token = this._vm.axios.CancelToken.source().token;
+                    if ($axios && $axios.CancelToken) {
+                        token = $axios.CancelToken.source().token;
 
                         ctx.commit('request', {
                             abort: function () {
@@ -186,7 +189,7 @@ export default {
                         });
                     }
 
-                    (this._vm.http || this._vm.axios)({
+                    ($http || $axios)({
                             method: data.method || 'get',
                             url: data.url,
                             params: data.body || data.params,
