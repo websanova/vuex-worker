@@ -9,6 +9,8 @@ export default {
 
             status: null,
 
+            percentComplete: 0,
+
             silent: null,
             
             loading: null,
@@ -49,6 +51,10 @@ export default {
             state.request = null;
         },
 
+        progress(state, percent) {
+            state.percentComplete = percent;
+        },
+
         clearStatus(state) {
             state.status = null;
         },
@@ -59,6 +65,10 @@ export default {
 
         clearErrors(state) {
             this._vm.$set(state, 'errors', {});
+        },
+
+        clearProgress(state) {
+            state.percentComplete = 0;
         },
 
         updateFields(state, fields) {
@@ -94,7 +104,8 @@ export default {
         clear(ctx,) {
             ctx.commit('clearFields');
             ctx.commit('clearErrors');
-            ctx.commit('clearStatus')
+            ctx.commit('clearStatus');
+            ctx.commit('clearProgress');
         },
 
         update(ctx, data) {
@@ -112,6 +123,7 @@ export default {
             
             if (ctx.state.clear) {
                 ctx.commit('clearFields');
+                ctx.commit('clearProgress');
             }
 
             if (ctx.state.msg && res && res.data.msg) {
@@ -138,6 +150,12 @@ export default {
             var body,
                 timer,
                 token;
+
+            var progress = function (e) {
+                var percent = e.lengthComputable ? Math.ceil(e.loaded / e.total * 100) : 0;
+                
+                ctx.commit('progress', percent);
+            };
 
             data = data || {};
 
@@ -198,7 +216,9 @@ export default {
                             cancelToken: token,
                             before: function(req) {
                                 ctx.commit('request', req);
-                            }
+                            },
+                            onUploadProgress: progress,
+                            progress: progress
                         })
                         .then((res) => {
                             if (data.success) {
@@ -232,6 +252,10 @@ export default {
     getters: {
         status(state) {
             return state.status;
+        },
+
+        percentComplete(state) {
+            return state.percentComplete;
         },
 
         loading(state) {

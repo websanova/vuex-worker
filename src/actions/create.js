@@ -32,6 +32,7 @@ export default {
                 loading: getters['form/loading'],
                 fields: getters['form/fields'],
                 errors: getters['form/errors'],
+                percentComplete: getters['form/percentComplete'],
             };
         },
 
