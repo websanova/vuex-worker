@@ -3,8 +3,6 @@ export default {
 
     state() {
         return {
-            msg: false,
-
             clear: false,
 
             status: null,
@@ -29,7 +27,6 @@ export default {
         start(state, data) {
             data = data || {};
 
-            state.msg = data.msg === true ? true : false;
             state.clear = data.clear === true ? true : false;
             state.silent = data.silent === true ? true : false;
 
@@ -125,10 +122,6 @@ export default {
                 ctx.commit('clearFields');
                 ctx.commit('clearProgress');
             }
-
-            if (ctx.state.msg && res && res.data.msg) {
-                this.dispatch('alert/success', res.data.msg);
-            }
         },
 
         error(ctx, res) {
@@ -140,10 +133,6 @@ export default {
             ]);
 
             ctx.commit('error');
-
-            if (ctx.state.msg && res.data.msg) {
-                this.dispatch('alert/error', res.data.msg);
-            }
         },
 
         send(ctx, data) {
@@ -186,7 +175,6 @@ export default {
                     var $axios = this._vm.axios || this._vm.$axios;
 
                     ctx.dispatch('start', {
-                        msg: data.msg,
                         clear: data.clear,
                         silent: data.silent
                     });
