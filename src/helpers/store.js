@@ -102,6 +102,31 @@ const filterPath = function(ctx, worker, replace) {
     }
 };
 
+const onAutoPaginate = function(ctx, worker, onNext, el, offset, interval) {
+    return setInterval(() => {
+        var data   = ctx.$store.getters[worker + '/worker/data'];
+        var form   = ctx.$store.getters[worker + '/worker/form'];
+        var filter = ctx.$store.getters[worker + '/worker/filter'];
+
+        var status       = form.status;
+        var isFinished   = data.current_page * data.per_page >= data.total;
+        var elOffset     = (el?.offsetHeight ?? 0) + (offset || 150);
+        var isPageBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - elOffset);
+
+        if (
+            !isFinished &&
+            isPageBottom &&
+            status !== 'loading'
+        ) {
+            if (onNext) {
+                onNext.call(ctx, {
+                    page: parseInt(filter.fields.page) + 1
+                });
+            }
+        }
+    }, (interval || 500));
+};
+
 const fetch = function(ctx, worker, dataStage, dataRequest) {
     var item;
 
