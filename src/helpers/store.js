@@ -110,7 +110,7 @@ const onAutoPaginate = function(ctx, worker, onNext, el, offset, interval) {
 
         var status       = form.status;
         var isFinished   = data.current_page * data.per_page >= data.total;
-        var elOffset     = (el?.offsetHeight ?? 0) + (offset || 150);
+        var elOffset     = (el ? el.offsetHeight : 0) + (offset || 150);
         var isPageBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - elOffset);
 
         if (
