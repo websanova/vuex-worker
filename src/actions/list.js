@@ -24,6 +24,16 @@ export default {
             state.data = data;
         },
 
+        merge(state, data) {
+            var items = state.data.items || [];
+
+            // Get new data set and merge existing
+            // into the front of the new data set.
+            data.items = items.concat(data.items || []);
+
+            state.data = data;
+        },
+
         items(state, data) {
             this._vm.$set(state.data, 'items', data);
         },
@@ -71,7 +81,7 @@ export default {
             success = data.success;
 
             data.success = function (res) {
-                ctx.commit('data', res.data.data);
+                ctx.commit(data.merge ? 'merge' : 'data', res.data.data);
 
                 if (success) {
                     success.apply(_this, arguments);
