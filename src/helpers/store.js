@@ -163,6 +163,7 @@ export {
     request,
     payload,
     filterPath,
+    onAutoPaginate,
     stageAndRequest,
     filterAndRequest,
 };
