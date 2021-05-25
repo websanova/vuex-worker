@@ -202,6 +202,13 @@ export default {
             return state.data;
         },
 
+        meta(state, getters) {
+            return {
+                isSearch: getters['filter/fields'].query ? true : false,
+                isResults: (state.data.items || []).length ? true : false
+            };
+        },
+
         find(state) {
             return (data) => {
                 var index;
