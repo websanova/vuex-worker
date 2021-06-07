@@ -34,6 +34,12 @@ const request = function(ctx, worker, data) {
         .dispatch(worker + '/request', data || {});
 };
 
+const stageAndReset = function(ctx, worker, dataStage, dataReset) {
+    stage(ctx, worker, dataStage);
+    
+    return reset(ctx, worker, dataReset);
+};
+
 const stageAndRequest = function(ctx, worker, dataStage, dataRequest) {
     stage(ctx, worker, dataStage);
     
@@ -166,6 +172,7 @@ export {
     payload,
     filterPath,
     onAutoPaginate,
+    stageAndReset,
     stageAndRequest,
     filterAndRequest,
 };
