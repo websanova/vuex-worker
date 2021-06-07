@@ -16,6 +16,10 @@ export default {
             data.method = data.method || 'DELETE';
 
             return ctx.dispatch('form/send', data);
+        },
+
+        clear(ctx) {
+            ctx.dispatch('stage/clear');
         }
     },
 
