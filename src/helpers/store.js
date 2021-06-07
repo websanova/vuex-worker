@@ -68,6 +68,7 @@ const payload = function(ctx, worker) {
                     meta: ctx.$store.getters[worker[i] + '/meta'] || ctx.$store.getters[worker[i] + '/worker/meta'],
                     data: ctx.$store.getters[worker[i] + '/data'] || ctx.$store.getters[worker[i] + '/worker/data'],
                     form: ctx.$store.getters[worker[i] + '/form'] || ctx.$store.getters[worker[i] + '/worker/form'],
+                    stage: ctx.$store.getters[worker[i] + '/stage'] || ctx.$store.getters[worker[i] + '/worker/stage/data'],
                     filter: ctx.$store.getters[worker[i] + '/filter'] || ctx.$store.getters[worker[i] + '/worker/filter']
                 };
             }
