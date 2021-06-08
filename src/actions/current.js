@@ -7,6 +7,12 @@ export default {
         stage: stage
     },
 
+    actions: {
+        clear(ctx) {
+            ctx.dispatch('stage/clear');
+        }
+    },
+
     getters: {
         stage(state, getters) {
             return {
