@@ -21,7 +21,7 @@ export default {
     
     mutations: {
         data(state, data) {
-            state.data = data;
+            this._vm.$set(state, 'data', data);
         },
 
         merge(state, data) {
@@ -31,7 +31,7 @@ export default {
             // into the front of the new data set.
             data.items = items.concat(data.items || []);
 
-            state.data = data;
+            this._vm.$set(state, 'data', data);
         },
 
         items(state, data) {

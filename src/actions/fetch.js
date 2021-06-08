@@ -17,7 +17,7 @@ export default {
     
     mutations: {
         data(state, data) {
-            state.data = data;
+            this._vm.$set(state, 'data', data);
         },
 
         sync(state, data) {
