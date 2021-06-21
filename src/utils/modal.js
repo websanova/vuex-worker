@@ -79,6 +79,10 @@ export default {
     getters: {
         current(state) {
             return state.current;
+        },
+
+        previous(state) {
+            return state.previous;
         }
     }
 }
